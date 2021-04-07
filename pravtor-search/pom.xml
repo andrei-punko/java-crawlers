@@ -13,6 +13,7 @@
 
   <properties>
     <apache-poi.version>4.1.1</apache-poi.version>
+    <lombok.version>1.18.10</lombok.version>
   </properties>
 
   <dependencies>
@@ -24,6 +25,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
+      <version>3.9</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -45,6 +47,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
     </dependency>
 
     <dependency>
