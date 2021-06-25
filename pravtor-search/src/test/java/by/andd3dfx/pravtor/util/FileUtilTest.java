@@ -1,10 +1,10 @@
 package by.andd3dfx.pravtor.util;
 
-import bad.robot.excel.matchers.WorkbookMatcher;
 import by.andd3dfx.pravtor.model.BatchSearchResult;
 import by.andd3dfx.pravtor.model.SearchCriteria;
 import by.andd3dfx.pravtor.model.TorrentData;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.dbunit.Assertion;
+import org.dbunit.dataset.excel.XlsDataSet;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,28 +41,27 @@ public class FileUtilTest {
     }
 
     @Test
-    public void writeIntoExcel() throws IOException {
-
+    public void writeIntoExcel() throws Exception {
         List<BatchSearchResult> searchItems = Arrays.asList(
-            new BatchSearchResult("Sheet label", Arrays.asList(
-                buildTorrentData("label 1", 23, 12, 234, "23 Mb", "link1"),
-                buildTorrentData("label 2", 22, 2, 54, "13 Mb", "link2")
-            )),
-            new BatchSearchResult("Sheet label 2", Arrays.asList(
-                buildTorrentData("label 3", 32, 3, 678, "55 Mb", "link3"),
-                buildTorrentData("label 4", 45, 5, 434, "22 Mb", "link4")
-            ))
+                new BatchSearchResult("Sheet label", Arrays.asList(
+                        buildTorrentData("label 1", 23, 12, 234, "23 Mb", "link1"),
+                        buildTorrentData("label 2", 22, 2, 54, "13 Mb", "link2")
+                )),
+                new BatchSearchResult("Sheet label 2", Arrays.asList(
+                        buildTorrentData("label 3", 32, 3, 678, "55 Mb", "link3"),
+                        buildTorrentData("label 4", 45, 5, 434, "22 Mb", "link4")
+                ))
         );
 
         fileUtil.writeIntoExcel(GENERATED_XLS_FILE, searchItems);
 
-        HSSFWorkbook actual = new HSSFWorkbook(new FileInputStream(GENERATED_XLS_FILE));
-        HSSFWorkbook expected = new HSSFWorkbook(new FileInputStream(EXPECTED_XLS_FILE));
-        assertThat(actual, WorkbookMatcher.sameWorkbook(expected));
+        final XlsDataSet generated = new XlsDataSet(new FileInputStream(GENERATED_XLS_FILE));
+        final XlsDataSet expected = new XlsDataSet(new FileInputStream(EXPECTED_XLS_FILE));
+        Assertion.assertEquals(generated, expected);
     }
 
     private TorrentData buildTorrentData(String label, int seedsCount, int peersCount, int downloadedCount,
-        String size, String linkUrl) {
+                                         String size, String linkUrl) {
         TorrentData torrentData = new TorrentData();
         torrentData.setLabel(label);
         torrentData.setSeedsCount(seedsCount);

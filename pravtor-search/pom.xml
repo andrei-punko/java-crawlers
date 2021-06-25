@@ -12,7 +12,7 @@
   <artifactId>pravtor-search</artifactId>
 
   <properties>
-    <apache-poi.version>4.1.1</apache-poi.version>
+    <apache-poi.version>3.17</apache-poi.version> <!-- restriction of org.dbunit:dbunit -->
     <lombok.version>1.18.10</lombok.version>
   </properties>
 
@@ -51,9 +51,9 @@
     </dependency>
 
     <dependency>
-      <groupId>bad.robot</groupId>
-      <artifactId>simple-excel</artifactId>
-      <version>1.2</version>
+      <groupId>org.dbunit</groupId>
+      <artifactId>dbunit</artifactId>
+      <version>2.7.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -62,16 +62,13 @@
       <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+    </dependency>
 
   </dependencies>
-
-  <repositories>
-    <repository>
-      <id>robot-tooling-repo</id>
-      <name>RobotTooling repository</name>
-      <url>http://robotooling.com/maven</url>
-    </repository>
-  </repositories>
 
   <build>
     <plugins>
