@@ -16,7 +16,7 @@ import org.jsoup.select.Elements;
 
 public class TutByJobSearchUtil {
 
-    private final String URL_PREFIX = "http://jobs.tut.by";
+    private final String URL_PREFIX = "http://rabota.by";
     private final String USER_AGENT = "Mozilla";
     private final String searchUrlFormat = URL_PREFIX + "/search/vacancy?area=1002&text=%s&page=%d";
 
