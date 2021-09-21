@@ -3,17 +3,19 @@ package by.andd3dfx.pravtor.util;
 import by.andd3dfx.pravtor.model.BatchSearchResult;
 import by.andd3dfx.pravtor.model.SearchCriteria;
 import by.andd3dfx.pravtor.model.TorrentData;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 public class FileUtil {
 
@@ -27,16 +29,17 @@ public class FileUtil {
      */
     public List<SearchCriteria> loadSearchCriteria(String fileName) throws IOException {
         return Files.readAllLines(Paths.get(fileName)).stream()
-            .map(line -> {
-                final String[] items = line.split("\t");
-                return new SearchCriteria(items[0], items[1]);
-            }).collect(Collectors.toList());
+                .filter(line -> StringUtils.isNotBlank(line) && !line.startsWith("#"))
+                .map(line -> {
+                    final String[] items = line.split(" ");
+                    return new SearchCriteria(items[0], items[1]);
+                }).collect(Collectors.toList());
     }
 
     /**
      * Write set of search items into multi sheet excel file
      *
-     * @param fileName name of excel file
+     * @param fileName    name of excel file
      * @param searchItems list of items to save, where each represents one sheet in result excel file
      */
     public void writeIntoExcel(String fileName, List<BatchSearchResult> searchItems) throws IOException {

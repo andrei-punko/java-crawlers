@@ -1,2 +1,4 @@
-txt-molitvy	https://pravtor.ru/viewforum.php?f=184
-txt-kanony	https://pravtor.ru/viewforum.php?f=183
+# Use SPACE delimiter!
+
+txt-molitvy https://pravtor.ru/viewforum.php?f=184
+txt-kanony https://pravtor.ru/viewforum.php?f=183
