@@ -10,12 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>report</artifactId>
-    <name>Aggregate Report</name>
-
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
+    <name>Aggregate Coverage Report</name>
 
     <dependencies>
         <dependency>
@@ -39,7 +34,7 @@
                 <executions>
                     <execution>
                         <id>report-aggregate</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
