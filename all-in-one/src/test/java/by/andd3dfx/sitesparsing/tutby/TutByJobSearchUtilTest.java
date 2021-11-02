@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
+import by.andd3dfx.sitesparsing.tutby.dto.SingleSearchResult;
 import java.util.LinkedHashMap;
 import org.junit.Before;
 import org.junit.Test;

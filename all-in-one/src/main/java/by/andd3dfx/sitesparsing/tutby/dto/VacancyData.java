@@ -1,4 +1,4 @@
-package by.andd3dfx.sitesparsing.tutby;
+package by.andd3dfx.sitesparsing.tutby.dto;
 
 import java.util.Set;
 

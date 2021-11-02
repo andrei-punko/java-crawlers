@@ -1,4 +1,4 @@
-package by.andd3dfx.sitesparsing.onlinerby;
+package by.andd3dfx.sitesparsing.onlinerby.dto;
 
 public class CpuSearchCriteria {
 

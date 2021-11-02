@@ -1,5 +1,7 @@
 package by.andd3dfx.sitesparsing.tutby;
 
+import by.andd3dfx.sitesparsing.tutby.dto.SingleSearchResult;
+import by.andd3dfx.sitesparsing.tutby.dto.VacancyData;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

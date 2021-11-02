@@ -1,6 +1,7 @@
 package by.andd3dfx.sitesparsing.onlinerby;
 
 import by.andd3dfx.sitesparsing.onlinerby.dto.CpuItem;
+import by.andd3dfx.sitesparsing.onlinerby.dto.CpuSearchCriteria;
 import by.andd3dfx.sitesparsing.onlinerby.dto.CpuSearchResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
