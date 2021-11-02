@@ -16,10 +16,30 @@
 
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
+
+    <jacoco.version>0.8.7</jacoco.version>
   </properties>
 
   <modules>
     <module>pravtor-search</module>
     <module>all-in-one</module>
+    <module>report</module>
   </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+        </executions>
+       </plugin>
+    </plugins>
+  </build>
 </project>
