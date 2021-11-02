@@ -1,7 +1,9 @@
 
-# Collection of crawlers for next sites:
+# Collection of crawlers for several sites
 
 [![Java CI with Maven](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml/badge.svg)](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml)
+[![Coverage](.github/badges/jacoco.svg)](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml)
+[![Branches](.github/badges/branches.svg)](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml)
 
 - [1k.by](http://1k.by) crawler
 
