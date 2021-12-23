@@ -1,22 +1,14 @@
 package by.andd3dfx.sitesparsing.tutby.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
+@AllArgsConstructor
 public class SingleSearchResult {
 
     private final List<VacancyData> dataItems;
     private final String nextPageUrl;
-
-    public SingleSearchResult(List<VacancyData> dataItems, String nextPageUrl) {
-        this.dataItems = dataItems;
-        this.nextPageUrl = nextPageUrl;
-    }
-
-    public List<VacancyData> getDataItems() {
-        return dataItems;
-    }
-
-    public String getNextPageUrl() {
-        return nextPageUrl;
-    }
 }

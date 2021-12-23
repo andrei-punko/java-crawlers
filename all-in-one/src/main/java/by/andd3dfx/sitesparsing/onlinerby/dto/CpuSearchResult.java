@@ -1,30 +1,22 @@
 package by.andd3dfx.sitesparsing.onlinerby.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.List;
 
+@AllArgsConstructor
+@Getter
 public class CpuSearchResult {
 
-    private List<CpuItem> cpuItems;
-    private Integer pagesAmount;
-
-    public CpuSearchResult(List<CpuItem> cpuItems, Integer pagesAmount) {
-        this.cpuItems = cpuItems;
-        this.pagesAmount = pagesAmount;
-    }
-
-    public List<CpuItem> getCpuItems() {
-        return cpuItems;
-    }
-
-    public Integer getPagesAmount() {
-        return pagesAmount;
-    }
+    private final List<CpuItem> cpuItems;
+    private final Integer pagesAmount;
 
     @Override
     public String toString() {
         return "CpuSearchResult{" +
-            "cpuItems=" + cpuItems +
-            ", pagesAmount=" + pagesAmount +
-            '}';
+                "cpuItems=" + cpuItems +
+                ", pagesAmount=" + pagesAmount +
+                '}';
     }
 }

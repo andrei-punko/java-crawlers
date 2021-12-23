@@ -1,8 +1,16 @@
 package by.andd3dfx.sitesparsing.onlinerby.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
+@Data
+@AllArgsConstructor
 public class CpuItem {
 
     private String name;
+    private String fullName;
     private String url;
     private double price;
 
@@ -10,42 +18,6 @@ public class CpuItem {
     private double frequency;
 
     private double usefulness;
-
-    public CpuItem(String name, String url, double price, int coresAmount, double frequency) {
-        this.name = name;
-        this.url = url;
-        this.price = price;
-        this.coresAmount = coresAmount;
-        this.frequency = frequency;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public int getCoresAmount() {
-        return coresAmount;
-    }
-
-    public double getFrequency() {
-        return frequency;
-    }
-
-    public double getUsefulness() {
-        return usefulness;
-    }
-
-    public void setUsefulness(double usefulness) {
-        this.usefulness = usefulness;
-    }
 
     @Override
     public String toString() {

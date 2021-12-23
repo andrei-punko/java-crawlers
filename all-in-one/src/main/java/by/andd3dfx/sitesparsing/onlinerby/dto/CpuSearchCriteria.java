@@ -1,5 +1,10 @@
 package by.andd3dfx.sitesparsing.onlinerby.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class CpuSearchCriteria {
 
     private Double maxPrice = 0.0;
@@ -9,30 +14,6 @@ public class CpuSearchCriteria {
     public CpuSearchCriteria(Double maxPrice, Integer minCoresAmount, Double minFrequency) {
         this.maxPrice = maxPrice;
         this.minCoresAmount = minCoresAmount;
-        this.minFrequency = minFrequency;
-    }
-
-    public Double getMaxPrice() {
-        return maxPrice;
-    }
-
-    public void setMaxPrice(Double maxPrice) {
-        this.maxPrice = maxPrice;
-    }
-
-    public Integer getMinCoresAmount() {
-        return minCoresAmount;
-    }
-
-    public void setMinCoresAmount(Integer minCoresAmount) {
-        this.minCoresAmount = minCoresAmount;
-    }
-
-    public Double getMinFrequency() {
-        return minFrequency;
-    }
-
-    public void setMinFrequency(Double minFrequency) {
         this.minFrequency = minFrequency;
     }
 

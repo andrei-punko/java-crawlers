@@ -4,6 +4,7 @@ import by.andd3dfx.sitesparsing.onlinerby.dto.CpuItem;
 import by.andd3dfx.sitesparsing.onlinerby.dto.CpuSearchCriteria;
 import by.andd3dfx.sitesparsing.onlinerby.dto.CpuSearchResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,15 +28,17 @@ public class CpuSearchUtil {
         Map items = mapper.readValue(new URL(urlSpec), Map.class);
         List<Map> products = (List<Map>) items.get("products");
 
-        List<CpuItem> cpuItems = products.stream().map(product -> {
-            String name = String.valueOf(product.get("name"));
-            String url = String.valueOf(product.get("html_url"));
-            Double price = extractPrice(product);
-            String description = String.valueOf(product.get("description"));
-            int coresAmount = extractCoresAmount(description);
-            double frequency = extractFrequency(description);
-            return new CpuItem(name, url, price, coresAmount, frequency);
-        }).collect(Collectors.toList());
+        List<CpuItem> cpuItems = products.stream()
+                .map(product -> CpuItem.builder()
+                        .name(String.valueOf(product.get("name")))
+                        .fullName(String.valueOf(product.get("full_name")))
+                        .url(String.valueOf(product.get("html_url")))
+                        .price(extractPrice(product))
+                        .coresAmount(extractCoresAmount(String.valueOf(product.get("description"))))
+                        .frequency(extractFrequency(String.valueOf(product.get("description"))))
+                        .usefulness(0)
+                        .build())
+                .collect(Collectors.toList());
         Integer lastPageNumber = (Integer) ((Map) items.get("page")).get("last");
 
         return new CpuSearchResult(cpuItems, lastPageNumber);
@@ -58,15 +61,16 @@ public class CpuSearchUtil {
 
             CpuSearchResult searchResult = extractPage(pageNumber);
             result.addAll(
-                searchResult.getCpuItems().stream()
-                    .filter(item -> item.getPrice() > 0)
-                    .filter(item -> item.getPrice() <= criteria.getMaxPrice())
-                    .filter(item -> item.getCoresAmount() >= criteria.getMinCoresAmount())
-                    .filter(item -> item.getFrequency() >= criteria.getMinFrequency())
-                    .map(item -> {
-                        item.setUsefulness(item.getPrice() / (item.getCoresAmount() * item.getFrequency()));
-                        return item;
-                    }).collect(Collectors.toList())
+                    searchResult.getCpuItems().stream()
+                            .filter(cpuItem -> cpuItem.getFullName().startsWith("AMD"))
+                            .filter(item -> item.getPrice() > 0)
+                            .filter(item -> item.getPrice() <= criteria.getMaxPrice())
+                            .filter(item -> item.getCoresAmount() >= criteria.getMinCoresAmount())
+                            .filter(item -> item.getFrequency() >= criteria.getMinFrequency())
+                            .map(item -> {
+                                item.setUsefulness(item.getPrice() / (item.getCoresAmount() * item.getFrequency()));
+                                return item;
+                            }).collect(Collectors.toList())
             );
 
             if (pageNumber == searchResult.getPagesAmount()) {
@@ -107,10 +111,10 @@ public class CpuSearchUtil {
 
     public static void main(String[] args) throws IOException {
         final CpuSearchCriteria criteria = new CpuSearchCriteria.Builder()
-            .setMaxPrice(1000.0)
-            .setMinCoresAmount(6)
-            .setMinFrequency(3.5d)
-            .build();
+                .setMaxPrice(1200.0)
+                .setMinCoresAmount(6)
+                .setMinFrequency(3.5d)
+                .build();
 
         final List<CpuItem> cpuItems = new CpuSearchUtil().calculateUsefulness(criteria);
 
