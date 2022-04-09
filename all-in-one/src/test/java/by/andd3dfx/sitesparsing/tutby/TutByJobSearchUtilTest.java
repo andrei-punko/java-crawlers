@@ -23,7 +23,7 @@ public class TutByJobSearchUtilTest {
         final SingleSearchResult result = util.singleSearch(util.buildSearchUrl("java"));
 
         assertThat("Next url should be present", result.getNextPageUrl(), is(
-            "http://rabota.by/search/vacancy?area=1002&text=java&page=1"));
+            "http://rabota.by/search/vacancy?area=1002&text=java&page=1&hhtmFrom=vacancy_search_list"));
         assertThat("At least 20 items expected", result.getDataItems().size(), greaterThanOrEqualTo(20));
 
         LinkedHashMap<String, Integer> statisticsSortedMap = util.collectStatistics(result.getDataItems());
