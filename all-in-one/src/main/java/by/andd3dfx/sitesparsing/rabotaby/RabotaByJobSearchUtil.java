@@ -1,7 +1,7 @@
-package by.andd3dfx.sitesparsing.tutby;
+package by.andd3dfx.sitesparsing.rabotaby;
 
-import by.andd3dfx.sitesparsing.tutby.dto.SingleSearchResult;
-import by.andd3dfx.sitesparsing.tutby.dto.VacancyData;
+import by.andd3dfx.sitesparsing.rabotaby.dto.SingleSearchResult;
+import by.andd3dfx.sitesparsing.rabotaby.dto.VacancyData;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,7 +16,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class TutByJobSearchUtil {
+public class RabotaByJobSearchUtil {
 
     private final String URL_PREFIX = "http://rabota.by";
     private final String USER_AGENT = "Mozilla";
@@ -69,19 +69,19 @@ public class TutByJobSearchUtil {
             throw new RuntimeException("Retrieve details failed", e);
         }
 
-        VacancyData vacancyData = new VacancyData();
-        vacancyData.setUrl(document.baseUri());
-        vacancyData.setCompanyName(document.select("a[class=vacancy-company-name]").text());
-        vacancyData.setTextContent(document.select("div[data-qa=vacancy-description]").text());
-        vacancyData.setKeywords(document.select("span[data-qa=bloko-tag__text]")
-            .stream()
-            .map(Element::text)
-            .flatMap(keyword -> Arrays.asList(keyword.split(", ")).stream())
-            .flatMap(keyword -> Arrays.asList(keyword.split(" & ")).stream())
-            .collect(Collectors.toSet())
-        );
-        vacancyData.setAddressString(document.select("div[class^=vacancy-address-text]").text());
-        return vacancyData;
+        return VacancyData.builder()
+            .url(document.baseUri())
+            .companyName(document.select("a[class=vacancy-company-name]").text())
+            .textContent(document.select("div[data-qa=vacancy-description]").text())
+            .keywords(document.select("span[data-qa=bloko-tag__text]")
+                    .stream()
+                    .map(Element::text)
+                    .flatMap(keyword -> Arrays.asList(keyword.split(", ")).stream())
+                    .flatMap(keyword -> Arrays.asList(keyword.split(" & ")).stream())
+                    .collect(Collectors.toSet())
+            )
+            .addressString(document.select("div[class^=vacancy-address-text]").text())
+            .build();
     }
 
     String buildSearchUrl(String searchString) {
@@ -92,7 +92,7 @@ public class TutByJobSearchUtil {
         if (args.length != 1) {
             throw new IllegalArgumentException("Path to output file should be populated!");
         }
-        final TutByJobSearchUtil searchUtil = new TutByJobSearchUtil();
+        final RabotaByJobSearchUtil searchUtil = new RabotaByJobSearchUtil();
 
         LinkedHashMap<String, Integer> statisticsSortedMap = searchUtil.collectStatistics("java");
         Path path = Paths.get(args[0]);
@@ -109,7 +109,6 @@ public class TutByJobSearchUtil {
     }
 
     public LinkedHashMap<String, Integer> collectStatistics(String searchString) {
-        final List<VacancyData> result = batchSearch(searchString);
-        return collectStatistics(result);
+        return collectStatistics(batchSearch(searchString));
     }
 }

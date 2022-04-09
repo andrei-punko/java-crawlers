@@ -1,4 +1,4 @@
-package by.andd3dfx.sitesparsing.tutby;
+package by.andd3dfx.sitesparsing.rabotaby;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

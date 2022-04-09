@@ -1,21 +1,21 @@
-package by.andd3dfx.sitesparsing.tutby;
+package by.andd3dfx.sitesparsing.rabotaby;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
-import by.andd3dfx.sitesparsing.tutby.dto.SingleSearchResult;
+import by.andd3dfx.sitesparsing.rabotaby.dto.SingleSearchResult;
 import java.util.LinkedHashMap;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TutByJobSearchUtilTest {
+public class RabotaByJobSearchUtilTest {
 
-    private TutByJobSearchUtil util;
+    private RabotaByJobSearchUtil util;
 
     @Before
     public void setup() {
-        util = new TutByJobSearchUtil();
+        util = new RabotaByJobSearchUtil();
     }
 
     @Test

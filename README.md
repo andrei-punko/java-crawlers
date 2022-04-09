@@ -7,7 +7,7 @@
 
 - [1k.by](http://1k.by) crawler
 
-  See [PriceSearchUtilTest](all-in-one/src/test/java/by/andd3dfx/sitesparsing/firstcatalog/PriceSearchUtilTest.java)
+  See [PriceSearchUtilTest](all-in-one/src/test/java/by/andd3dfx/sitesparsing/firstcatalogby/PriceSearchUtilTest.java)
 
 
 - [onliner.by](http://onliner.by) crawler
@@ -17,8 +17,8 @@
 
 - [rabota.by](http://rabota.by) crawler
 
-  See [StatisticsTest](all-in-one/src/test/java/by/andd3dfx/sitesparsing/tutby/StatisticsTest.java)
-  and [TutByJobSearchUtilTest](all-in-one/src/test/java/by/andd3dfx/sitesparsing/tutby/TutByJobSearchUtilTest.java)
+  See [StatisticsTest](all-in-one/src/test/java/by/andd3dfx/sitesparsing/rabotaby/StatisticsTest.java)
+  and [RabotaByJobSearchUtilTest](all-in-one/src/test/java/by/andd3dfx/sitesparsing/rabotaby/RabotaByJobSearchUtilTest.java)
 
 
 - [pravtor.ru](http://pravtor.ru) crawler

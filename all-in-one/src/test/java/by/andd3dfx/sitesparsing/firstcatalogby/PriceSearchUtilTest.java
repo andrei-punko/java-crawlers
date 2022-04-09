@@ -1,4 +1,4 @@
-package by.andd3dfx.sitesparsing.firstcatalog;
+package by.andd3dfx.sitesparsing.firstcatalogby;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

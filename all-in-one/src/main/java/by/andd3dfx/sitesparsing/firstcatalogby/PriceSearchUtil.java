@@ -1,4 +1,4 @@
-package by.andd3dfx.sitesparsing.firstcatalog;
+package by.andd3dfx.sitesparsing.firstcatalogby;
 
 import java.io.IOException;
 import org.jsoup.Jsoup;
