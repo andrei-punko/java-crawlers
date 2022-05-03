@@ -4,7 +4,6 @@ audio-Sv-Pisanie https://pravtor.ru/viewforum.php?f=20
 audio-sviatootecheskie-teksty https://pravtor.ru/viewforum.php?f=22
 audio-knigi-na-prav-materialy https://pravtor.ru/viewforum.php?f=137
 audio-lekcii-propovedi https://pravtor.ru/viewforum.php?f=17
-audio-istoricheskaja-kniga https://pravtor.ru/viewforum.php?f=46
 txt-Sv-Pisanie https://pravtor.ru/viewforum.php?f=27
 txt-sv-teksty-i-zhitija https://pravtor.ru/viewforum.php?f=28
 txt-prav-literatura https://pravtor.ru/viewforum.php?f=129
