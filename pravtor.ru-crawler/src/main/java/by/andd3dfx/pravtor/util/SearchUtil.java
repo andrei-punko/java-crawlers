@@ -32,8 +32,7 @@ public class SearchUtil {
     public List<TorrentData> batchSearch(String startingPageUrl, int maxPagesCap, long throttlingDelay)
         throws InterruptedException, IOException {
 
-        log.info("Starting URL: %s, maxPagesCap=%d, delay=%dms%n",
-            startingPageUrl, maxPagesCap, throttlingDelay);
+        log.info("Starting URL: {}, maxPagesCap={}, delay={}ms", startingPageUrl, maxPagesCap, throttlingDelay);
 
         String nextPageUrl = startingPageUrl;
         int pagesCounter = 0;
@@ -42,14 +41,14 @@ public class SearchUtil {
         while (nextPageUrl != null && (maxPagesCap == -1 || pagesCounter < maxPagesCap)) {
 
             SingleSearchResult singleSearchResult = singleSearch(nextPageUrl);
-            log.info("Hit %d, %d retrieved%n", pagesCounter, singleSearchResult.getDataItems().size());
+            log.info("Hit {}, {} retrieved", pagesCounter, singleSearchResult.getDataItems().size());
             pagesCounter++;
             nextPageUrl = singleSearchResult.getNextPageUrl();
             result.addAll(singleSearchResult.getDataItems());
 
             sleep(throttlingDelay);
         }
-        log.info("Records retrieved: " + result.size());
+        log.info("Records retrieved: {}", result.size());
 
         return result;
     }
