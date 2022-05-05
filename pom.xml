@@ -16,11 +16,9 @@
 
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-
-    <jacoco.version>0.8.7</jacoco.version>
   </properties>
 
   <modules>
-    <module>pravtor-search</module>
+    <module>pravtor.ru-crawler</module>
   </modules>
 </project>
