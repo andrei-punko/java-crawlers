@@ -2,18 +2,6 @@
 # Collection of crawlers for several sites
 
 [![Java CI with Maven](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml/badge.svg)](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml)
-[![Coverage](.github/badges/jacoco.svg)](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml)
-[![Branches](.github/badges/branches.svg)](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml)
-
-- [1k.by](http://1k.by) crawler
-
-  See [PriceSearchUtilTest](all-in-one/src/test/java/by/andd3dfx/sitesparsing/firstcatalogby/PriceSearchUtilTest.java)
-
-
-- [onliner.by](http://onliner.by) crawler
-
-  See [CpuSearchUtilTest](all-in-one/src/test/java/by/andd3dfx/sitesparsing/onlinerby/CpuSearchUtilTest.java)
-
 
 - [rabota.by](http://rabota.by) crawler
 

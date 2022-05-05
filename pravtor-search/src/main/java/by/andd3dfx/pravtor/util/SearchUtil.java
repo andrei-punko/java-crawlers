@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,6 +23,7 @@ import org.jsoup.select.Elements;
 /**
  * Util to perform singleSearch on http://pravtor.ru torrent tracker
  */
+@Slf4j
 public class SearchUtil {
 
     private static final String USER_AGENT = "Mozilla";
@@ -29,7 +32,7 @@ public class SearchUtil {
     public List<TorrentData> batchSearch(String startingPageUrl, int maxPagesCap, long throttlingDelay)
         throws InterruptedException, IOException {
 
-        System.out.printf("Starting URL: %s, maxPagesCap=%d, delay=%dms%n",
+        log.info("Starting URL: %s, maxPagesCap=%d, delay=%dms%n",
             startingPageUrl, maxPagesCap, throttlingDelay);
 
         String nextPageUrl = startingPageUrl;
@@ -39,14 +42,14 @@ public class SearchUtil {
         while (nextPageUrl != null && (maxPagesCap == -1 || pagesCounter < maxPagesCap)) {
 
             SingleSearchResult singleSearchResult = singleSearch(nextPageUrl);
-            System.out.printf("Hit %d, %d retrieved%n", pagesCounter, singleSearchResult.getDataItems().size());
+            log.info("Hit %d, %d retrieved%n", pagesCounter, singleSearchResult.getDataItems().size());
             pagesCounter++;
             nextPageUrl = singleSearchResult.getNextPageUrl();
             result.addAll(singleSearchResult.getDataItems());
 
             sleep(throttlingDelay);
         }
-        System.out.println("Records retrieved: " + result.size());
+        log.info("Records retrieved: " + result.size());
 
         return result;
     }

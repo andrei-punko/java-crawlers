@@ -11,11 +11,14 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+@Slf4j
 public class RabotaByJobSearchUtil {
 
     private final String URL_PREFIX = "http://rabota.by";
@@ -59,7 +62,7 @@ public class RabotaByJobSearchUtil {
     }
 
     private VacancyData retrieveVacancyDetails(String searchUrl) {
-        System.out.println("Retrieve vacancy details for " + searchUrl);
+        log.info("Retrieve vacancy details for " + searchUrl);
         Document document;
         try {
             document = Jsoup

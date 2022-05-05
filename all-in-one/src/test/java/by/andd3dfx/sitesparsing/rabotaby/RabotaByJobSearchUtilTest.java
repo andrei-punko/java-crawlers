@@ -1,13 +1,14 @@
 package by.andd3dfx.sitesparsing.rabotaby;
 
+import by.andd3dfx.sitesparsing.rabotaby.dto.SingleSearchResult;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.LinkedHashMap;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-
-import by.andd3dfx.sitesparsing.rabotaby.dto.SingleSearchResult;
-import java.util.LinkedHashMap;
-import org.junit.Before;
-import org.junit.Test;
 
 public class RabotaByJobSearchUtilTest {
 
@@ -27,6 +28,6 @@ public class RabotaByJobSearchUtilTest {
         assertThat("At least 20 items expected", result.getDataItems().size(), greaterThanOrEqualTo(20));
 
         LinkedHashMap<String, Integer> statisticsSortedMap = util.collectStatistics(result.getDataItems());
-        System.out.println(statisticsSortedMap);
+        // TODO: add asserts
     }
 }

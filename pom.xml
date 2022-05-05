@@ -23,30 +23,5 @@
   <modules>
     <module>pravtor-search</module>
     <module>all-in-one</module>
-    <module>report</module>
   </modules>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>${jacoco.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>generate-code-coverage-report</id>
-            <phase>test</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-        </executions>
-       </plugin>
-    </plugins>
-  </build>
 </project>
