@@ -3,12 +3,6 @@
 
 [![Java CI with Maven](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml/badge.svg)](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml)
 
-- [rabota.by](http://rabota.by) crawler
-
-  See [StatisticsTest](all-in-one/src/test/java/by/andd3dfx/sitesparsing/rabotaby/StatisticsTest.java)
-  and [RabotaByJobSearchUtilTest](all-in-one/src/test/java/by/andd3dfx/sitesparsing/rabotaby/RabotaByJobSearchUtilTest.java)
-
-
 - [pravtor.ru](http://pravtor.ru) crawler
 
   See [SearchUtilTest](pravtor-search/src/test/java/by/andd3dfx/pravtor/util/SearchUtilTest.java)

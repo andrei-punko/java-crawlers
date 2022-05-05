@@ -22,6 +22,5 @@
 
   <modules>
     <module>pravtor-search</module>
-    <module>all-in-one</module>
   </modules>
 </project>
