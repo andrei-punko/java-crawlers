@@ -62,13 +62,13 @@ public class FileUtilTest {
 
     private TorrentData buildTorrentData(String label, int seedsCount, int peersCount, int downloadedCount,
                                          String size, String linkUrl) {
-        TorrentData torrentData = new TorrentData();
-        torrentData.setLabel(label);
-        torrentData.setSeedsCount(seedsCount);
-        torrentData.setPeersCount(peersCount);
-        torrentData.setDownloadedCount(downloadedCount);
-        torrentData.setSize(size);
-        torrentData.setLinkUrl(linkUrl);
-        return torrentData;
+        return TorrentData.builder()
+                .label(label)
+                .seedsCount(seedsCount)
+                .peersCount(peersCount)
+                .downloadedCount(downloadedCount)
+                .size(size)
+                .linkUrl(linkUrl)
+                .build();
     }
 }

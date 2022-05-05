@@ -1,12 +1,10 @@
 package by.andd3dfx.pravtor.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+@Builder
+@Data
 public class TorrentData {
 
     private String label;

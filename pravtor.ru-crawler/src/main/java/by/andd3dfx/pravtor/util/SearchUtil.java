@@ -6,6 +6,7 @@ import by.andd3dfx.pravtor.model.BatchSearchResult;
 import by.andd3dfx.pravtor.model.SearchCriteria;
 import by.andd3dfx.pravtor.model.SingleSearchResult;
 import by.andd3dfx.pravtor.model.TorrentData;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +31,7 @@ public class SearchUtil {
     private static final String PREFIX = "https://pravtor.ru/";
 
     public List<TorrentData> batchSearch(String startingPageUrl, int maxPagesCap, long throttlingDelay)
-        throws InterruptedException, IOException {
+            throws InterruptedException, IOException {
 
         log.info("Starting URL: {}, maxPagesCap={}, delay={}ms", startingPageUrl, maxPagesCap, throttlingDelay);
 
@@ -55,22 +56,21 @@ public class SearchUtil {
 
     SingleSearchResult singleSearch(String startingPageUrl) throws IOException {
         Document document = Jsoup
-            .connect(startingPageUrl)
-            .userAgent(USER_AGENT).get();
+                .connect(startingPageUrl)
+                .userAgent(USER_AGENT).get();
 
         Elements elements = document.select("tr[id^=tr-]");
 
-        List<TorrentData> dataItems =
-            elements.stream().map(element ->
-                new TorrentData() {{
-                    setLabel(element.select("div[class=torTopic]").select("a").text());
-                    setLinkUrl(extractLink(element.select("a[class=torTopic]").attr("href")));
-                    setSeedsCount(convertToInteger(element.select("span[title=Seeders]").text()));
-                    setPeersCount(convertToInteger(element.select("span[title=Leechers]").text()));
-                    setSize(element.select("div[title=Скачать .torrent]").select("div[class=small]").text());
-                    setDownloadedCount(convertToInteger(element.select("p[title=Скачан]").text()));
-                }}
-            ).collect(Collectors.toList());
+        List<TorrentData> dataItems = elements.stream()
+                .map(element -> TorrentData.builder()
+                        .label(element.select("div[class=torTopic]").select("a").text())
+                        .linkUrl(extractLink(element.select("a[class=torTopic]").attr("href")))
+                        .seedsCount(convertToInteger(element.select("span[title=Seeders]").text()))
+                        .peersCount(convertToInteger(element.select("span[title=Leechers]").text()))
+                        .size(element.select("div[title=Скачать .torrent]").select("div[class=small]").text())
+                        .downloadedCount(convertToInteger(element.select("p[title=Скачан]").text()))
+                        .build()
+                ).collect(Collectors.toList());
 
         String prevUrl = extractPrevOrNext(document, "Пред.");
         String nextUrl = extractPrevOrNext(document, "След.");
@@ -90,9 +90,9 @@ public class SearchUtil {
 
     private String extractPrevOrNext(Document document, String value) {
         List<Element> pageItems = document.select("td[class=tRight vBottom nowrap small]")
-            .select("a").stream()
-            .filter(s -> s.text().contains(value))
-            .collect(Collectors.toList());
+                .select("a").stream()
+                .filter(s -> s.text().contains(value))
+                .collect(Collectors.toList());
 
         return pageItems.isEmpty() ? null : PREFIX + pageItems.get(0).attr("href");
     }
@@ -113,10 +113,10 @@ public class SearchUtil {
             String label = searchCriteria.getTopic();
 
             List<TorrentData> result = searchUtil.batchSearch(startingUrl, -1, 20)
-                .stream()
-                .filter(torrentData -> torrentData.getDownloadedCount() != null)
-                .sorted(Comparator.comparingInt(TorrentData::getDownloadedCount).reversed())
-                .collect(Collectors.toList());
+                    .stream()
+                    .filter(torrentData -> torrentData.getDownloadedCount() != null)
+                    .sorted(Comparator.comparingInt(TorrentData::getDownloadedCount).reversed())
+                    .collect(Collectors.toList());
             searchItems.add(new BatchSearchResult(label, result));
         }
 
