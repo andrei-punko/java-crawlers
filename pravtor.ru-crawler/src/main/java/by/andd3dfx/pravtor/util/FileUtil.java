@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class FileUtil {
 
-    private final String[] HEADER_LABELS = {"Название", "Seeds", "Peers", "Скачано", "Размер", "Ссылка"};
+    public static final String[] HEADER_LABELS = {"Название", "Seeds", "Peers", "Скачано", "Размер", "Ссылка"};
 
     /**
      * Load list of search criteria items
