@@ -8,7 +8,7 @@ Decided to keep all of them in one repo to make other repos free from making cal
 ## Prerequisites
 
 - Maven 3
-- JDK 11
+- JDK 17
 
 ## [pravtor.ru](http://pravtor.ru) crawler
 
