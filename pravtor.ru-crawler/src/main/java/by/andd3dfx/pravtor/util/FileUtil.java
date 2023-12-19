@@ -37,10 +37,10 @@ public class FileUtil {
     }
 
     /**
-     * Write set of search items into multi sheet excel file
+     * Write a set of search items into multi sheet Excel file
      *
-     * @param fileName    name of excel file
-     * @param searchItems list of items to save, where each represents one sheet in result excel file
+     * @param fileName    name of Excel file
+     * @param searchItems list of items to save, where each represents one sheet in result Excel file
      */
     public void writeIntoExcel(String fileName, List<BatchSearchResult> searchItems) throws IOException {
         Workbook book = new HSSFWorkbook();
