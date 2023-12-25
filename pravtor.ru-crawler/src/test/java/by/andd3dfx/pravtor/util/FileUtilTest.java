@@ -3,7 +3,6 @@ package by.andd3dfx.pravtor.util;
 import by.andd3dfx.pravtor.model.BatchSearchResult;
 import by.andd3dfx.pravtor.model.SearchCriteria;
 import by.andd3dfx.pravtor.model.TorrentData;
-import org.dbunit.Assertion;
 import org.dbunit.dataset.excel.XlsDataSet;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.dbunit.Assertion.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -57,7 +57,7 @@ public class FileUtilTest {
 
         final XlsDataSet generated = new XlsDataSet(new FileInputStream(GENERATED_XLS_FILE));
         final XlsDataSet expected = new XlsDataSet(new FileInputStream(EXPECTED_XLS_FILE));
-        Assertion.assertEquals(generated, expected);
+        assertEquals(generated, expected);
     }
 
     private TorrentData buildTorrentData(String label, int seedsCount, int peersCount, int downloadedCount,

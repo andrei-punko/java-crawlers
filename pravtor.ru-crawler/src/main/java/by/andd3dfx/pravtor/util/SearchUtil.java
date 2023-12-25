@@ -1,24 +1,20 @@
 package by.andd3dfx.pravtor.util;
 
-import static java.lang.Thread.sleep;
-
-import by.andd3dfx.pravtor.model.BatchSearchResult;
-import by.andd3dfx.pravtor.model.SearchCriteria;
 import by.andd3dfx.pravtor.model.SingleSearchResult;
 import by.andd3dfx.pravtor.model.TorrentData;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Util to perform singleSearch on http://pravtor.ru torrent tracker
@@ -93,32 +89,9 @@ public class SearchUtil {
                 .filter(s -> s.text().contains(value))
                 .collect(Collectors.toList());
 
-        return pageItems.isEmpty() ? null : PREFIX + pageItems.get(0).attr("href");
-    }
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        if (args.length != 2) {
-            throw new IllegalArgumentException("Should be 2 parameters!");
+        if (pageItems.isEmpty()) {
+            return null;
         }
-        String paramsFileName = args[0];
-        String excelFileName = args[1];
-
-        final SearchUtil searchUtil = new SearchUtil();
-        final FileUtil fileUtil = new FileUtil();
-
-        List<BatchSearchResult> searchItems = new ArrayList<>();
-        for (SearchCriteria searchCriteria : fileUtil.loadSearchCriteria(paramsFileName)) {
-            String startingUrl = searchCriteria.getUrl();
-            String label = searchCriteria.getTopic();
-
-            List<TorrentData> result = searchUtil.batchSearch(startingUrl, -1, 20)
-                    .stream()
-                    .filter(torrentData -> torrentData.getDownloadedCount() != null)
-                    .sorted(Comparator.comparingInt(TorrentData::getDownloadedCount).reversed())
-                    .collect(Collectors.toList());
-            searchItems.add(new BatchSearchResult(label, result));
-        }
-
-        fileUtil.writeIntoExcel(excelFileName, searchItems);
+        return PREFIX + pageItems.get(0).attr("href");
     }
 }
