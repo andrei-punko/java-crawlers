@@ -33,7 +33,7 @@ public class FileUtil {
                 .map(line -> {
                     final String[] items = line.split(" ");
                     return new SearchCriteria(items[0], items[1]);
-                }).collect(Collectors.toList());
+                }).toList();
     }
 
     /**

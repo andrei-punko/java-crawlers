@@ -65,7 +65,7 @@ public class SearchUtil {
                         .size(element.select("div[title=Скачать .torrent]").select("div[class=small]").text())
                         .downloadedCount(convertToInteger(element.select("p[title=Скачан]").text()))
                         .build()
-                ).collect(Collectors.toList());
+                ).toList();
 
         String prevUrl = extractPrevOrNext(document, "Пред.");
         String nextUrl = extractPrevOrNext(document, "След.");
@@ -87,7 +87,7 @@ public class SearchUtil {
         List<Element> pageItems = document.select("td[class=tRight vBottom nowrap small]")
                 .select("a").stream()
                 .filter(s -> s.text().contains(value))
-                .collect(Collectors.toList());
+                .toList();
 
         if (pageItems.isEmpty()) {
             return null;

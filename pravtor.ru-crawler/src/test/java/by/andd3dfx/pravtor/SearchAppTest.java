@@ -20,8 +20,8 @@ import static org.junit.Assert.fail;
 
 public class SearchAppTest {
 
-    private String PARAMS_FILE = "src/test/resources/test-params.txt";
-    private String RESULT_XLS_FILE = "target/tmp-result.xls";
+    private final String PARAMS_FILE = "src/test/resources/test-params.txt";
+    private final String RESULT_XLS_FILE = "target/tmp-result.xls";
 
     private SearchApp searchApp;
 
@@ -56,20 +56,20 @@ public class SearchAppTest {
 
     @Test
     public void testMainWithNoParamsProvided() throws Exception {
-        runMainNCheck(new String[]{});
+        runMainNCheckExceptionThrow(new String[]{});
     }
 
     @Test
     public void testMainWithOneParamProvided() throws Exception {
-        runMainNCheck(new String[]{PARAMS_FILE});
+        runMainNCheckExceptionThrow(new String[]{PARAMS_FILE});
     }
 
     @Test
     public void testMainWithThreeParamsProvided() throws Exception {
-        runMainNCheck(new String[]{PARAMS_FILE, RESULT_XLS_FILE, "one more"});
+        runMainNCheckExceptionThrow(new String[]{PARAMS_FILE, RESULT_XLS_FILE, "one more"});
     }
 
-    private void runMainNCheck(String[] args) throws Exception {
+    private void runMainNCheckExceptionThrow(String[] args) throws Exception {
         try {
             searchApp.main(args);
             fail("Exception should be thrown");
