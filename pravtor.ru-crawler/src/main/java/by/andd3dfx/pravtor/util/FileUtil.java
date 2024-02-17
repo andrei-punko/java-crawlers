@@ -52,7 +52,9 @@ public class FileUtil {
                 setColumnsWidth(sheet);
             });
 
-            book.write(new FileOutputStream(fileName));
+            try (var outputStream = new FileOutputStream(fileName)) {
+                book.write(outputStream);
+            }
         }
     }
 
