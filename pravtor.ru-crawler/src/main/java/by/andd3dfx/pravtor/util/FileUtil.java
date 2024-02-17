@@ -43,18 +43,17 @@ public class FileUtil {
      * @param searchItems list of items to save, where each represents one sheet in result Excel file
      */
     public void writeIntoExcel(String fileName, List<BatchSearchResult> searchItems) throws IOException {
-        Workbook book = new HSSFWorkbook();
+        try (var book = new HSSFWorkbook();) {
+            searchItems.forEach(searchItem -> {
+                Sheet sheet = book.createSheet(searchItem.getTopic());
 
-        searchItems.forEach(searchItem -> {
-            Sheet sheet = book.createSheet(searchItem.getTopic());
+                populateHeaderLabels(sheet);
+                populateContent(sheet, searchItem);
+                setColumnsWidth(sheet);
+            });
 
-            populateHeaderLabels(sheet);
-            populateContent(sheet, searchItem);
-            setColumnsWidth(sheet);
-        });
-
-        book.write(new FileOutputStream(fileName));
-        book.close();
+            book.write(new FileOutputStream(fileName));
+        }
     }
 
     private void populateHeaderLabels(Sheet sheet) {
