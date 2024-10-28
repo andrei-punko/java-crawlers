@@ -1,8 +1,6 @@
 
-# Collection of web crawlers
+# Collection of Java-based web crawlers
 [![Java CI with Maven](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml/badge.svg)](https://github.com/andrei-punko/java-crawlers/actions/workflows/maven.yml)
-
-Decided to keep all crawlers in one repo to make other repos free from making calls to external resources
 
 ## Prerequisites
 
@@ -14,13 +12,14 @@ Decided to keep all crawlers in one repo to make other repos free from making ca
 mvn clean install
 ```
 
-## Crawlers
+## Crawler for Orthodox torrent tracker [pravtor.ru](http://pravtor.ru)
+Check [SearchUtilTest](pravtor.ru-crawler/src/test/java/by/andd3dfx/pravtor/util/SearchUtilTest.java)
+and [FileUtilTest](pravtor.ru-crawler/src/test/java/by/andd3dfx/pravtor/util/FileUtilTest.java) for details.
 
-### The [pravtor.ru](http://pravtor.ru) crawler
-  See [SearchUtilTest](pravtor.ru-crawler/src/test/java/by/andd3dfx/pravtor/util/SearchUtilTest.java)
-  and [FileUtilTest](pravtor.ru-crawler/src/test/java/by/andd3dfx/pravtor/util/FileUtilTest.java)
+To make search - run [run-search.bat](pravtor.ru-crawler/run-search.bat) script.  
+Collected data will be placed into [result.xls](pravtor.ru-crawler/sandbox/result.xls) file in `sandbox` folder
 
-### How to use
-```
-./pravtor.ru-crawler/search.bat
-```
+## Crawler for vacancies aggregator [rabota.by / hh.ru](http://rabota.by)
+Check [RabotaByJobSearchUtil](rabota.by-crawler/src/main/java/by/andd3dfx/sitesparsing/rabotaby/RabotaByJobSearchUtil.java) for details.
+
+To make search - run `main()` method of [MainApp](rabota.by-crawler/src/main/java/by/andd3dfx/sitesparsing/rabotaby/MainApp.java) class

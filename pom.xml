@@ -20,5 +20,6 @@
 
   <modules>
     <module>pravtor.ru-crawler</module>
+    <module>rabota.by-crawler</module>
   </modules>
 </project>
