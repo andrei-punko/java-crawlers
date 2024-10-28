@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import static java.lang.Thread.sleep;
 
 /**
- * Util to perform singleSearch on http://pravtor.ru torrent tracker
+ * Util to perform search on <a href="http://pravtor.ru">pravtor.ru</a> torrent tracker
  */
 @Slf4j
 public class SearchUtil {
