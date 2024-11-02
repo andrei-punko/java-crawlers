@@ -19,6 +19,7 @@
   </properties>
 
   <modules>
+    <module>crawler-engine</module>
     <module>pravtor.ru-crawler</module>
     <module>rabota.by-crawler</module>
   </modules>

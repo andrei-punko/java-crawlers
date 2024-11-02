@@ -1,11 +1,14 @@
 package by.andd3dfx.sitesparsing.rabotaby;
 
-import static java.util.stream.Collectors.toMap;
+import by.andd3dfx.sitesparsing.rabotaby.dto.VacancyData;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import static java.util.stream.Collectors.toMap;
 
 public class Statistics {
 
@@ -33,5 +36,13 @@ public class Statistics {
                 (e1, e2) -> e2,
                 LinkedHashMap::new
             ));
+    }
+
+    public LinkedHashMap<String, Integer> collectStatistics(List<VacancyData> vacancyData) {
+        final Statistics statistics = new Statistics();
+        vacancyData.stream()
+                .map(VacancyData::getKeywords)
+                .forEach(keywords -> keywords.forEach(statistics::putKeyword));
+        return statistics.buildSortedMap();
     }
 }

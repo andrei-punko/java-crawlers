@@ -1,14 +1,15 @@
-package by.andd3dfx.pravtor.model;
+package by.andd3dfx.crawler.dto;
 
-import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @RequiredArgsConstructor
-public class SingleSearchResult {
+public class SingleSearchResult<T extends CrawlerData> {
 
-    private final List<TorrentData> dataItems;
+    private final List<T> dataItems;
     private final String prevPageUrl;
     private final String nextPageUrl;
 }

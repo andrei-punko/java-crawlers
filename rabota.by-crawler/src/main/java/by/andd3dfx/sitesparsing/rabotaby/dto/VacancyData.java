@@ -1,12 +1,14 @@
 package by.andd3dfx.sitesparsing.rabotaby.dto;
 
 import java.util.Set;
+
+import by.andd3dfx.crawler.dto.CrawlerData;
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
-public class VacancyData {
+public class VacancyData implements CrawlerData {
 
     private String url;
     private String companyName;

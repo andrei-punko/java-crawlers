@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
 
 public class MainApp {
 
@@ -12,9 +11,14 @@ public class MainApp {
         if (args.length != 1) {
             throw new IllegalArgumentException("Path to output file should be populated!");
         }
-        var searchUtil = new RabotaByJobSearchUtil();
 
-        LinkedHashMap<String, Integer> statisticsSortedMap = searchUtil.collectStatistics("java");
+        var searchUtil = new SearchUtil();
+        var pageUrl = searchUtil.buildSearchUrl("java");
+        var searchResult = searchUtil.batchSearch(pageUrl);
+
+        var statistics = new Statistics();
+        var statisticsSortedMap = statistics.collectStatistics(searchResult);
+
         Path path = Paths.get(args[0]);
         byte[] strToBytes = statisticsSortedMap.toString().getBytes();
         Files.write(path, strToBytes);
