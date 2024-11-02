@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 public abstract class WebCrawler<T extends CrawlerData> {
 
-    private static final String USER_AGENT = "Mozilla";
+    protected static final String USER_AGENT = "Mozilla";
 
     /**
      * Batch search using provided starting page URL, max pages cap 10 and throttling delay 20ms
@@ -104,7 +104,9 @@ public abstract class WebCrawler<T extends CrawlerData> {
 
     protected abstract Elements extractElements(Document document);
 
-    protected abstract String extractPrevUrl(Document document);
+    protected String extractPrevUrl(Document document) {
+        return null;
+    }
 
     protected abstract String extractNextUrl(Document document);
 
