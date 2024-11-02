@@ -16,8 +16,7 @@ public class MainApp {
         var pageUrl = searchUtil.buildSearchUrl("java");
         var searchResult = searchUtil.batchSearch(pageUrl);
 
-        var statistics = new Statistics();
-        var statisticsSortedMap = statistics.collectStatistics(searchResult);
+        var statisticsSortedMap = new Statistics().collectStatistics(searchResult);
 
         Path path = Paths.get(args[0]);
         byte[] strToBytes = statisticsSortedMap.toString().getBytes();

@@ -39,10 +39,9 @@ public class Statistics {
     }
 
     public LinkedHashMap<String, Integer> collectStatistics(List<VacancyData> vacancyData) {
-        final Statistics statistics = new Statistics();
         vacancyData.stream()
                 .map(VacancyData::getKeywords)
-                .forEach(keywords -> keywords.forEach(statistics::putKeyword));
-        return statistics.buildSortedMap();
+                .forEach(keywords -> keywords.forEach(this::putKeyword));
+        return buildSortedMap();
     }
 }
