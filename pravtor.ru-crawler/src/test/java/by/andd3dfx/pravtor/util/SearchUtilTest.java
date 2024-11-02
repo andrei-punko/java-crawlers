@@ -1,6 +1,5 @@
 package by.andd3dfx.pravtor.util;
 
-import by.andd3dfx.pravtor.model.SingleSearchResult;
 import by.andd3dfx.pravtor.model.TorrentData;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,15 +22,15 @@ public class SearchUtilTest {
     }
 
     @Test
-    public void batchSearch() throws IOException, InterruptedException {
+    public void batchSearch() {
         List<TorrentData> result = searchUtil.batchSearch(STARTING_URL, 2, 20);
 
         assertThat("Wrong amount of result records", result.size(), is(100));
     }
 
     @Test
-    public void singleSearch() throws IOException {
-        SingleSearchResult result = searchUtil.singleSearch(STARTING_URL);
+    public void singleSearch() {
+        var result = searchUtil.singleSearch(STARTING_URL);
 
         assertThat("Wrong amount of result records", result.getDataItems().size(), is(50));
     }

@@ -1,11 +1,12 @@
 package by.andd3dfx.pravtor.model;
 
+import by.andd3dfx.crawler.dto.CrawlerData;
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
-public class TorrentData {
+public class TorrentData implements CrawlerData {
 
     private String label;
     private String linkUrl;
