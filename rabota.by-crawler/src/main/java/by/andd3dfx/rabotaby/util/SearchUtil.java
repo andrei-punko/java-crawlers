@@ -1,7 +1,7 @@
-package by.andd3dfx.sitesparsing.rabotaby;
+package by.andd3dfx.rabotaby.util;
 
 import by.andd3dfx.crawler.engine.WebCrawler;
-import by.andd3dfx.sitesparsing.rabotaby.dto.VacancyData;
+import by.andd3dfx.rabotaby.dto.VacancyData;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

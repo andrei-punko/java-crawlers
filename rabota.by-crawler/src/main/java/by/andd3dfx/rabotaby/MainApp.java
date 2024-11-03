@@ -1,4 +1,7 @@
-package by.andd3dfx.sitesparsing.rabotaby;
+package by.andd3dfx.rabotaby;
+
+import by.andd3dfx.rabotaby.util.SearchUtil;
+import by.andd3dfx.rabotaby.util.StatisticsUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +19,7 @@ public class MainApp {
         var pageUrl = searchUtil.buildSearchUrl("java");
         var searchResult = searchUtil.batchSearch(pageUrl);
 
-        var statisticsSortedMap = new Statistics().collectStatistics(searchResult);
+        var statisticsSortedMap = new StatisticsUtil().collectStatistics(searchResult);
 
         Path path = Paths.get(args[0]);
         byte[] strToBytes = statisticsSortedMap.toString().getBytes();

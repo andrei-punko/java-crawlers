@@ -18,21 +18,21 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class SearchAppTest {
+public class MainAppTest {
 
     private final String PARAMS_FILE = "src/test/resources/test-params.txt";
     private final String RESULT_XLS_FILE = "target/tmp-result.xls";
 
-    private SearchApp searchApp;
+    private MainApp mainApp;
 
     @Before
     public void setup() {
-        searchApp = new SearchApp();
+        mainApp = new MainApp();
     }
 
     @Test
-    public void testMain() throws IOException, InterruptedException {
-        searchApp.main(new String[]{PARAMS_FILE, RESULT_XLS_FILE});
+    public void testMain() throws IOException {
+        mainApp.main(new String[]{PARAMS_FILE, RESULT_XLS_FILE});
 
         // Check output XLS existence
         assertTrue(Files.exists(Path.of(RESULT_XLS_FILE)));
@@ -71,7 +71,7 @@ public class SearchAppTest {
 
     private void runMainNCheckExceptionThrow(String[] args) throws Exception {
         try {
-            searchApp.main(args);
+            mainApp.main(args);
             fail("Exception should be thrown");
         } catch (IllegalArgumentException iae) {
             assertThat(iae.getMessage(), is("Should be 2 parameters!"));

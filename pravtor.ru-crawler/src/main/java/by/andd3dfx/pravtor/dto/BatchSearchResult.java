@@ -1,12 +1,13 @@
-package by.andd3dfx.pravtor.model;
+package by.andd3dfx.pravtor.dto;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class SearchCriteria {
+public class BatchSearchResult {
 
     private final String topic;
-    private final String url;
+    private final List<TorrentData> dataItems;
 }

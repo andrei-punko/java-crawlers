@@ -1,6 +1,6 @@
-package by.andd3dfx.sitesparsing.rabotaby;
+package by.andd3dfx.rabotaby.util;
 
-import by.andd3dfx.sitesparsing.rabotaby.dto.VacancyData;
+import by.andd3dfx.rabotaby.dto.VacancyData;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toMap;
 
-public class Statistics {
+public class StatisticsUtil {
 
     private Map<String, Integer> keywordToFreqMap = new HashMap<>();
 

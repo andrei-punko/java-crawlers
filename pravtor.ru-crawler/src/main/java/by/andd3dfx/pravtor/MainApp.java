@@ -1,7 +1,7 @@
 package by.andd3dfx.pravtor;
 
-import by.andd3dfx.pravtor.model.BatchSearchResult;
-import by.andd3dfx.pravtor.model.TorrentData;
+import by.andd3dfx.pravtor.dto.BatchSearchResult;
+import by.andd3dfx.pravtor.dto.TorrentData;
 import by.andd3dfx.pravtor.util.FileUtil;
 import by.andd3dfx.pravtor.util.SearchUtil;
 
@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class SearchApp {
+public class MainApp {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException {
         if (args.length != 2) {
             throw new IllegalArgumentException("Should be 2 parameters!");
         }

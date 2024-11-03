@@ -1,8 +1,8 @@
 package by.andd3dfx.pravtor.util;
 
-import by.andd3dfx.pravtor.model.BatchSearchResult;
-import by.andd3dfx.pravtor.model.SearchCriteria;
-import by.andd3dfx.pravtor.model.TorrentData;
+import by.andd3dfx.pravtor.dto.BatchSearchResult;
+import by.andd3dfx.pravtor.dto.SearchCriteria;
+import by.andd3dfx.pravtor.dto.TorrentData;
 import org.dbunit.dataset.excel.XlsDataSet;
 import org.junit.Before;
 import org.junit.Test;

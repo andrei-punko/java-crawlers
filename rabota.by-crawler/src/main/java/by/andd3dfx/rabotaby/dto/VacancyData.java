@@ -1,4 +1,4 @@
-package by.andd3dfx.sitesparsing.rabotaby.dto;
+package by.andd3dfx.rabotaby.dto;
 
 import java.util.Set;
 

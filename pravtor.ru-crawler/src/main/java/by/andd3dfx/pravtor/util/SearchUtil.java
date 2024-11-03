@@ -1,7 +1,7 @@
 package by.andd3dfx.pravtor.util;
 
 import by.andd3dfx.crawler.engine.WebCrawler;
-import by.andd3dfx.pravtor.model.TorrentData;
+import by.andd3dfx.pravtor.dto.TorrentData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;

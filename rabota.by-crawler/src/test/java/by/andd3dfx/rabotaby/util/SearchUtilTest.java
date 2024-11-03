@@ -1,4 +1,4 @@
-package by.andd3dfx.sitesparsing.rabotaby;
+package by.andd3dfx.rabotaby.util;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,12 +11,12 @@ public class SearchUtilTest {
 
     private static final int RECORDS_PER_PAGE = 20;
     private SearchUtil searchUtil;
-    private Statistics statistics;
+    private StatisticsUtil statisticsUtil;
 
     @Before
     public void setup() {
         searchUtil = new SearchUtil();
-        statistics = new Statistics();
+        statisticsUtil = new StatisticsUtil();
     }
 
     @Test

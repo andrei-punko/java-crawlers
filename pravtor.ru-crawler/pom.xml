@@ -108,7 +108,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>by.andd3dfx.pravtor.SearchApp</mainClass>
+              <mainClass>by.andd3dfx.pravtor.MainApp</mainClass>
             </manifest>
           </archive>
         </configuration>

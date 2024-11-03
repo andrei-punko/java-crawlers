@@ -1,21 +1,19 @@
 package by.andd3dfx.pravtor.util;
 
-import by.andd3dfx.pravtor.model.BatchSearchResult;
-import by.andd3dfx.pravtor.model.SearchCriteria;
-import by.andd3dfx.pravtor.model.TorrentData;
+import by.andd3dfx.pravtor.dto.BatchSearchResult;
+import by.andd3dfx.pravtor.dto.SearchCriteria;
+import by.andd3dfx.pravtor.dto.TorrentData;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileUtil {
 

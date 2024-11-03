@@ -1,4 +1,4 @@
-package by.andd3dfx.sitesparsing.rabotaby;
+package by.andd3dfx.rabotaby.util;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -8,33 +8,34 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 
-public class StatisticsTest {
+public class StatisticsUtilTest {
 
-    private Statistics statistics;
+    private StatisticsUtil statisticsUtil;
 
     @Before
     public void setUp() {
-        statistics = new Statistics();
+        statisticsUtil = new StatisticsUtil();
     }
 
     @Test
     public void testStatisticsCollector() {
-        statistics.putKeyword("Java");
-        statistics.putKeyword("Spring");
-        statistics.putKeyword("Java");
-        statistics.putKeyword("Spring");
-        statistics.putKeyword("SQL");
-        statistics.putKeyword("Spring");
+        statisticsUtil.putKeyword("Java");
+        statisticsUtil.putKeyword("Spring");
+        statisticsUtil.putKeyword("Java");
+        statisticsUtil.putKeyword("Spring");
+        statisticsUtil.putKeyword("SQL");
+        statisticsUtil.putKeyword("Spring");
 
-        assertThat("Wrong amount of Java items", statistics.get("Java"), is(2));
-        assertThat("Wrong amount of SQL items", statistics.get("SQL"), is(1));
-        assertThat("Wrong amount of Spring items", statistics.get("Spring"), is(3));
-        assertThat("Wrong amount of absent item", statistics.get("EJB"), is(nullValue()));
+        assertThat("Wrong amount of Java items", statisticsUtil.get("Java"), is(2));
+        assertThat("Wrong amount of SQL items", statisticsUtil.get("SQL"), is(1));
+        assertThat("Wrong amount of Spring items", statisticsUtil.get("Spring"), is(3));
+        assertThat("Wrong amount of absent item", statisticsUtil.get("EJB"), is(nullValue()));
 
-        final LinkedHashMap<String, Integer> map = statistics.buildSortedMap();
+        final LinkedHashMap<String, Integer> map = statisticsUtil.buildSortedMap();
         final Set<Entry<String, Integer>> entries = map.entrySet();
         final Iterator<Entry<String, Integer>> iterator = entries.iterator();
 

@@ -1,4 +1,4 @@
-package by.andd3dfx.pravtor.model;
+package by.andd3dfx.pravtor.dto;
 
 import by.andd3dfx.crawler.dto.CrawlerData;
 import lombok.Builder;
