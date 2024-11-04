@@ -1,6 +1,6 @@
 package by.andd3dfx.rabotaby;
 
-import by.andd3dfx.rabotaby.util.SearchUtil;
+import by.andd3dfx.rabotaby.crawler.RabotabyWebCrawler;
 import by.andd3dfx.rabotaby.util.StatisticsUtil;
 
 import java.io.IOException;
@@ -15,9 +15,9 @@ public class MainApp {
             throw new IllegalArgumentException("Path to output file should be populated!");
         }
 
-        var searchUtil = new SearchUtil();
-        var pageUrl = searchUtil.buildStartingSearchUrl("java");
-        var searchResult = searchUtil.batchSearch(pageUrl);
+        var crawler = new RabotabyWebCrawler();
+        var pageUrl = crawler.buildStartingSearchUrl("java");
+        var searchResult = crawler.batchSearch(pageUrl);
 
         var statisticsSortedMap = new StatisticsUtil().collectStatistics(searchResult);
 

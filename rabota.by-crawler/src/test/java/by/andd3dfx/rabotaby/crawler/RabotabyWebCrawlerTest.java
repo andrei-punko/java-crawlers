@@ -1,4 +1,4 @@
-package by.andd3dfx.rabotaby.util;
+package by.andd3dfx.rabotaby.crawler;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -7,22 +7,20 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
-public class SearchUtilTest {
+public class RabotabyWebCrawlerTest {
 
     private static final int RECORDS_PER_PAGE = 20;
-    private SearchUtil searchUtil;
-    private StatisticsUtil statisticsUtil;
+    private RabotabyWebCrawler crawler;
 
     @Before
     public void setup() {
-        searchUtil = new SearchUtil();
-        statisticsUtil = new StatisticsUtil();
+        crawler = new RabotabyWebCrawler();
     }
 
     @Test
     public void singleSearch() {
-        var pageUrl = searchUtil.buildStartingSearchUrl("java");
-        var result = searchUtil.singleSearch(pageUrl);
+        var pageUrl = crawler.buildStartingSearchUrl("java");
+        var result = crawler.singleSearch(pageUrl);
 
         assertThat("Next url should be present", result.nextPageUrl(), is(
                 "http://rabota.by/search/vacancy?area=1002&text=java&page=1&hhtmFrom=vacancy_search_list"));
@@ -31,8 +29,8 @@ public class SearchUtilTest {
 
     @Test
     public void batchSearch() {
-        var pageUrl = searchUtil.buildStartingSearchUrl("java");
-        var searchResult = searchUtil.batchSearch(pageUrl, 2);
+        var pageUrl = crawler.buildStartingSearchUrl("java");
+        var searchResult = crawler.batchSearch(pageUrl, 2);
 
         assertThat(searchResult.size(), is(2 * RECORDS_PER_PAGE));
     }

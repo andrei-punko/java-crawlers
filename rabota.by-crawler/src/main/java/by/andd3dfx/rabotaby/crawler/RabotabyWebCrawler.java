@@ -1,4 +1,4 @@
-package by.andd3dfx.rabotaby.util;
+package by.andd3dfx.rabotaby.crawler;
 
 import by.andd3dfx.crawler.engine.WebCrawler;
 import by.andd3dfx.rabotaby.dto.VacancyData;
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class SearchUtil extends WebCrawler<VacancyData> {
+public class RabotabyWebCrawler extends WebCrawler<VacancyData> {
 
     private final String BASE_URL = "http://rabota.by";
 

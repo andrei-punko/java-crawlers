@@ -3,7 +3,7 @@ package by.andd3dfx.pravtor;
 import by.andd3dfx.pravtor.dto.BatchSearchResult;
 import by.andd3dfx.pravtor.dto.TorrentData;
 import by.andd3dfx.pravtor.util.FileUtil;
-import by.andd3dfx.pravtor.util.SearchUtil;
+import by.andd3dfx.pravtor.crawler.PravtorWebCrawler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Comparator;
 
 public class MainApp {
 
-    private static final SearchUtil searchUtil = new SearchUtil();;
+    private static final PravtorWebCrawler crawler = new PravtorWebCrawler();;
     private static final FileUtil fileUtil = new FileUtil();
 
     public static void main(String[] args) throws IOException {
@@ -26,7 +26,7 @@ public class MainApp {
             String startingUrl = searchCriteria.url();
             String label = searchCriteria.topic();
 
-            var result = searchUtil.batchSearch(startingUrl, -1, 20)
+            var result = crawler.batchSearch(startingUrl, -1, 20)
                     .stream()
                     .filter(torrentData -> torrentData.getDownloadedCount() != null)
                     .sorted(Comparator.comparingInt(TorrentData::getDownloadedCount).reversed())

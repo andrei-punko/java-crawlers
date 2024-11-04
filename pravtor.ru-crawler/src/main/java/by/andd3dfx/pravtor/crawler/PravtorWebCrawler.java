@@ -1,4 +1,4 @@
-package by.andd3dfx.pravtor.util;
+package by.andd3dfx.pravtor.crawler;
 
 import by.andd3dfx.crawler.engine.WebCrawler;
 import by.andd3dfx.pravtor.dto.TorrentData;
@@ -14,7 +14,7 @@ import java.util.List;
  * Util to perform search on <a href="http://pravtor.ru">pravtor.ru</a> torrent tracker
  */
 @Slf4j
-public class SearchUtil extends WebCrawler<TorrentData> {
+public class PravtorWebCrawler extends WebCrawler<TorrentData> {
 
     private static final String BASE_URL = "https://pravtor.ru/";
 
