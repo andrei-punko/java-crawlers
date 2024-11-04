@@ -65,11 +65,11 @@ public abstract class WebCrawler<T extends CrawlerData> {
 
         while (nextPage != null && (maxPagesCap == -1 || pagesCounter < maxPagesCap)) {
             SingleSearchResult<T> searchResult = singleSearch(nextPage);
-            List<T> dataItems = searchResult.getDataItems();
+            List<T> dataItems = searchResult.dataItems();
             log.info("Hit №{}, {} items retrieved", pagesCounter, dataItems.size());
             pagesCounter++;
             result.addAll(dataItems);
-            nextPage = searchResult.getNextPageUrl();
+            nextPage = searchResult.nextPageUrl();
 
             Thread.sleep(throttlingDelayMs);
         }
@@ -97,16 +97,11 @@ public abstract class WebCrawler<T extends CrawlerData> {
                 .toList();
         log.debug("Single search: url={}, items={}", pageUrl, dataItems.size());
 
-        String prevUrl = extractPrevUrl(document);
         String nextUrl = extractNextUrl(document);
-        return new SingleSearchResult(dataItems, prevUrl, nextUrl);
+        return new SingleSearchResult(dataItems, nextUrl);
     }
 
     protected abstract Elements extractElements(Document document);
-
-    protected String extractPrevUrl(Document document) {
-        return null;
-    }
 
     protected abstract String extractNextUrl(Document document);
 

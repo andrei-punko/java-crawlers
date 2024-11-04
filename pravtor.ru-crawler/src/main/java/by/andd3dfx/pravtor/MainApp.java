@@ -11,20 +11,20 @@ import java.util.Comparator;
 
 public class MainApp {
 
+    private static final SearchUtil searchUtil = new SearchUtil();;
+    private static final FileUtil fileUtil = new FileUtil();
+
     public static void main(String[] args) throws IOException {
         if (args.length != 2) {
-            throw new IllegalArgumentException("Should be 2 parameters!");
+            throw new IllegalArgumentException("Two 2 params should be provided: paramsFileName & excelFileName!");
         }
         String paramsFileName = args[0];
         String excelFileName = args[1];
 
-        var searchUtil = new SearchUtil();
-        var fileUtil = new FileUtil();
-
         var searchItems = new ArrayList<BatchSearchResult>();
         for (var searchCriteria : fileUtil.loadSearchCriteria(paramsFileName)) {
-            String startingUrl = searchCriteria.getUrl();
-            String label = searchCriteria.getTopic();
+            String startingUrl = searchCriteria.url();
+            String label = searchCriteria.topic();
 
             var result = searchUtil.batchSearch(startingUrl, -1, 20)
                     .stream()

@@ -34,11 +34,11 @@ public class FileUtilTest {
 
         assertThat("Wrong count of criteria items", criteriaItems.size(), is(2));
         var item0 = criteriaItems.get(0);
-        assertThat("Wrong url of first item", item0.getTopic(), is("txt-molitvy"));
-        assertThat("Wrong label of first item", item0.getUrl(), is("https://pravtor.ru/viewforum.php?f=184"));
+        assertThat("Wrong url of first item", item0.topic(), is("txt-molitvy"));
+        assertThat("Wrong label of first item", item0.url(), is("https://pravtor.ru/viewforum.php?f=184"));
         var item1 = criteriaItems.get(1);
-        assertThat("Wrong label of second item", item1.getTopic(), is("txt-kanony"));
-        assertThat("Wrong url of second item", item1.getUrl(), is("https://pravtor.ru/viewforum.php?f=183"));
+        assertThat("Wrong label of second item", item1.topic(), is("txt-kanony"));
+        assertThat("Wrong url of second item", item1.url(), is("https://pravtor.ru/viewforum.php?f=183"));
     }
 
     @Test

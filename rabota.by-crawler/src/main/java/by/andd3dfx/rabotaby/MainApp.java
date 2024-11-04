@@ -16,7 +16,7 @@ public class MainApp {
         }
 
         var searchUtil = new SearchUtil();
-        var pageUrl = searchUtil.buildSearchUrl("java");
+        var pageUrl = searchUtil.buildStartingSearchUrl("java");
         var searchResult = searchUtil.batchSearch(pageUrl);
 
         var statisticsSortedMap = new StatisticsUtil().collectStatistics(searchResult);

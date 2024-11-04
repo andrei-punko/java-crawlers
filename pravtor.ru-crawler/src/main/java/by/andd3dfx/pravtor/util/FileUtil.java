@@ -15,12 +15,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * Util to work with files
+ */
 public class FileUtil {
 
     public static final String[] HEADER_LABELS = {"Название", "Seeds", "Peers", "Скачано", "Размер", "Ссылка"};
 
     /**
-     * Load list of search criteria items
+     * Load list of search criteria items from file
      *
      * @param fileName name of params file
      * @return list of search criteria items
@@ -43,7 +46,7 @@ public class FileUtil {
     public void writeIntoExcel(String fileName, List<BatchSearchResult> searchItems) throws IOException {
         try (var book = new HSSFWorkbook();) {
             searchItems.forEach(searchItem -> {
-                Sheet sheet = book.createSheet(searchItem.getTopic());
+                Sheet sheet = book.createSheet(searchItem.topic());
 
                 populateHeaderLabels(sheet);
                 populateContent(sheet, searchItem);
@@ -66,7 +69,7 @@ public class FileUtil {
 
     private void populateContent(Sheet sheet, BatchSearchResult searchItem) {
         int rowsCount = 1;
-        for (TorrentData dataItem : searchItem.getDataItems()) {
+        for (TorrentData dataItem : searchItem.dataItems()) {
             int column_number = 0;
             Row row = sheet.createRow(rowsCount);
             row.createCell(column_number++).setCellValue(dataItem.getLabel());

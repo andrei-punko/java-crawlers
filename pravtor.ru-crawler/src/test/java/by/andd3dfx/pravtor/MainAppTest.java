@@ -74,7 +74,7 @@ public class MainAppTest {
             mainApp.main(args);
             fail("Exception should be thrown");
         } catch (IllegalArgumentException iae) {
-            assertThat(iae.getMessage(), is("Should be 2 parameters!"));
+            assertThat(iae.getMessage(), is("Two 2 params should be provided: paramsFileName & excelFileName!"));
         }
     }
 }

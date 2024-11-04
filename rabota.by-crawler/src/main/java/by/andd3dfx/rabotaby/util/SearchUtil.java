@@ -2,24 +2,24 @@ package by.andd3dfx.rabotaby.util;
 
 import by.andd3dfx.crawler.engine.WebCrawler;
 import by.andd3dfx.rabotaby.dto.VacancyData;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class SearchUtil extends WebCrawler<VacancyData> {
 
-    private final String URL_PREFIX = "http://rabota.by";
-    private final String searchUrlFormat = URL_PREFIX + "/search/vacancy?area=1002&text=%s&page=%d";
+    private final String BASE_URL = "http://rabota.by";
 
-    public String buildSearchUrl(String searchString) {
-        return String.format(searchUrlFormat, searchString, 0);
+    public String buildStartingSearchUrl(String searchString) {
+        final var format = BASE_URL + "/search/vacancy?area=1002&text=%s&page=%d";
+        return String.format(format, searchString, 0);
     }
 
     @Override
@@ -33,21 +33,17 @@ public class SearchUtil extends WebCrawler<VacancyData> {
         if (nextPageItem.isEmpty()) {
             return null;
         }
-        return URL_PREFIX + nextPageItem.attr("href");
+        return BASE_URL + nextPageItem.attr("href");
     }
 
+    @SneakyThrows
     @Override
     protected VacancyData mapElementToData(Element element) {
         String searchUrl = element.select("a").attr("href");
         log.info("Retrieve vacancy details for {}", searchUrl);
-        Document document;
-        try {
-            document = Jsoup
+        Document document = Jsoup
                     .connect(searchUrl)
                     .userAgent(USER_AGENT).get();
-        } catch (IOException e) {
-            throw new RuntimeException("Retrieve details failed", e);
-        }
 
         return VacancyData.builder()
                 .url(document.baseUri())

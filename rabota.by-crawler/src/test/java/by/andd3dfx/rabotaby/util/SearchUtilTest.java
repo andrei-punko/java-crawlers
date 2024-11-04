@@ -21,17 +21,17 @@ public class SearchUtilTest {
 
     @Test
     public void singleSearch() {
-        var pageUrl = searchUtil.buildSearchUrl("java");
+        var pageUrl = searchUtil.buildStartingSearchUrl("java");
         var result = searchUtil.singleSearch(pageUrl);
 
-        assertThat("Next url should be present", result.getNextPageUrl(), is(
+        assertThat("Next url should be present", result.nextPageUrl(), is(
                 "http://rabota.by/search/vacancy?area=1002&text=java&page=1&hhtmFrom=vacancy_search_list"));
-        assertThat("At least 20 items expected", result.getDataItems().size(), greaterThanOrEqualTo(RECORDS_PER_PAGE));
+        assertThat("At least 20 items expected", result.dataItems().size(), greaterThanOrEqualTo(RECORDS_PER_PAGE));
     }
 
     @Test
     public void batchSearch() {
-        var pageUrl = searchUtil.buildSearchUrl("java");
+        var pageUrl = searchUtil.buildStartingSearchUrl("java");
         var searchResult = searchUtil.batchSearch(pageUrl, 2);
 
         assertThat(searchResult.size(), is(2 * RECORDS_PER_PAGE));

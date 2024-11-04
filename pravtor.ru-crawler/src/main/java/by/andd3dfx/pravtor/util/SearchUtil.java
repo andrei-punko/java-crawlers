@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 public class SearchUtil extends WebCrawler<TorrentData> {
 
-    private static final String PREFIX = "https://pravtor.ru/";
+    private static final String BASE_URL = "https://pravtor.ru/";
 
     @Override
     protected Elements extractElements(Document document) {
@@ -24,13 +24,17 @@ public class SearchUtil extends WebCrawler<TorrentData> {
     }
 
     @Override
-    protected String extractPrevUrl(Document document) {
-        return extractPrevOrNext(document, "Пред.");
-    }
-
-    @Override
     protected String extractNextUrl(Document document) {
-        return extractPrevOrNext(document, "След.");
+        List<Element> pageItems = document
+                .select("td[class=tRight vBottom nowrap small]")
+                .select("a").stream()
+                .filter(s -> s.text().contains("След."))
+                .toList();
+
+        if (pageItems.isEmpty()) {
+            return null;
+        }
+        return BASE_URL + pageItems.get(0).attr("href");
     }
 
     @Override
@@ -45,20 +49,11 @@ public class SearchUtil extends WebCrawler<TorrentData> {
                 .build();
     }
 
-    private String extractPrevOrNext(Document document, String value) {
-        List<Element> pageItems = document.select("td[class=tRight vBottom nowrap small]")
-                .select("a").stream()
-                .filter(s -> s.text().contains(value))
-                .toList();
-
-        if (pageItems.isEmpty()) {
-            return null;
-        }
-        return PREFIX + pageItems.get(0).attr("href");
-    }
-
     private String extractLink(String href) {
-        return StringUtils.isEmpty(href) ? href : PREFIX + href.substring(2);
+        if (StringUtils.isEmpty(href)) {
+            return href;
+        }
+        return BASE_URL + href.substring(2);
     }
 
     private Integer convertToInteger(String value) {

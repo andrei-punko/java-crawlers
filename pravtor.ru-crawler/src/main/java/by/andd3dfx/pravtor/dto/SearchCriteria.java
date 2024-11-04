@@ -1,12 +1,5 @@
 package by.andd3dfx.pravtor.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+public record SearchCriteria(String topic, String url) {
 
-@Getter
-@RequiredArgsConstructor
-public class SearchCriteria {
-
-    private final String topic;
-    private final String url;
 }

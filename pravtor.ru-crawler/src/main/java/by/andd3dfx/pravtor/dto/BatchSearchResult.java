@@ -1,13 +1,7 @@
 package by.andd3dfx.pravtor.dto;
 
 import java.util.List;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@Getter
-@RequiredArgsConstructor
-public class BatchSearchResult {
+public record BatchSearchResult(String topic, List<TorrentData> dataItems) {
 
-    private final String topic;
-    private final List<TorrentData> dataItems;
 }

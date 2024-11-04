@@ -31,6 +31,6 @@ public class SearchUtilTest {
     public void singleSearch() {
         var result = searchUtil.singleSearch(STARTING_URL);
 
-        assertThat("Wrong amount of result records", result.getDataItems().size(), is(50));
+        assertThat("Wrong amount of result records", result.dataItems().size(), is(50));
     }
 }
