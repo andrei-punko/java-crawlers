@@ -26,12 +26,17 @@ public class MainApp {
         Path path = Paths.get(args[0]);
 
         int pagesCap = -1;
-        if (args.length == 2) {
+        if (args.length >= 2) {
             pagesCap = Integer.parseInt(args[1]);
         }
 
+        int timeoutMs = 20;
+        if (args.length >= 3) {
+            timeoutMs = Integer.parseInt(args[2]);
+        }
+
         var pageUrl = crawler.buildStartingSearchUrl("java");
-        var searchResult = crawler.batchSearch(pageUrl, pagesCap);
+        var searchResult = crawler.batchSearch(pageUrl, pagesCap, timeoutMs);
 
         var jsonString = objectMapper
                 .writerWithDefaultPrettyPrinter()
