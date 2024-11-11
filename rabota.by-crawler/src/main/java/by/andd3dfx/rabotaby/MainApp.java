@@ -1,7 +1,7 @@
 package by.andd3dfx.rabotaby;
 
 import by.andd3dfx.rabotaby.crawler.RabotabyWebCrawler;
-import by.andd3dfx.rabotaby.util.StatisticsUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,19 +10,32 @@ import java.nio.file.Paths;
 
 public class MainApp {
 
+    private static RabotabyWebCrawler crawler = new RabotabyWebCrawler();
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
+    /**
+     * Start vacancies search process, store results into JSON file after that
+     *
+     * @param args command-line params: path+name of output file [and pages cap amount]
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Path to output file should be populated!");
+        if (args.length == 0) {
+            throw new IllegalArgumentException("Output file path+name should be populated!");
+        }
+        Path path = Paths.get(args[0]);
+
+        int pagesCap = -1;
+        if (args.length == 2) {
+            pagesCap = Integer.parseInt(args[1]);
         }
 
-        var crawler = new RabotabyWebCrawler();
         var pageUrl = crawler.buildStartingSearchUrl("java");
-        var searchResult = crawler.batchSearch(pageUrl);
+        var searchResult = crawler.batchSearch(pageUrl, pagesCap);
 
-        var statisticsSortedMap = new StatisticsUtil().collectStatistics(searchResult);
-
-        Path path = Paths.get(args[0]);
-        byte[] strToBytes = statisticsSortedMap.toString().getBytes();
-        Files.write(path, strToBytes);
+        var jsonString = objectMapper
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(searchResult);
+        Files.write(path, jsonString.getBytes());
     }
 }

@@ -33,5 +33,4 @@ Collected data will be placed into [result.xls](pravtor.ru-crawler/sandbox/resul
 Check [RabotabyWebCrawler](rabota.by-crawler/src/main/java/by/andd3dfx/rabotaby/crawler/RabotabyWebCrawler.java)
 in `rabota.by-crawler` module for details
 
-To make search - run `main()` method of [MainApp](rabota.by-crawler/src/main/java/by/andd3dfx/rabotaby/MainApp.java)
-class with populated output path in command line param
+To make search - use [run-search.bat](rabota.by-crawler/run-search.bat) script.
