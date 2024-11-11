@@ -13,8 +13,11 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Crawler to extract data from <a href="https://rabota.by">rabota.by</a> vacancies aggregator
+ */
 @Slf4j
-public class RabotabyWebCrawler extends WebCrawler<VacancyData> {
+public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
 
     private final String BASE_URL = "http://rabota.by";
 

@@ -1,6 +1,6 @@
 package by.andd3dfx.rabotaby;
 
-import by.andd3dfx.rabotaby.crawler.RabotabyWebCrawler;
+import by.andd3dfx.rabotaby.crawler.RabotaByWebCrawler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 
 public class MainApp {
 
-    private static RabotabyWebCrawler crawler = new RabotabyWebCrawler();
+    private static RabotaByWebCrawler crawler = new RabotaByWebCrawler();
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     /**

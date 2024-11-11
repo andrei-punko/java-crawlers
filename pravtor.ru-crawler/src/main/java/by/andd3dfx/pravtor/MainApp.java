@@ -3,7 +3,7 @@ package by.andd3dfx.pravtor;
 import by.andd3dfx.pravtor.dto.BatchSearchResult;
 import by.andd3dfx.pravtor.dto.TorrentData;
 import by.andd3dfx.pravtor.util.FileUtil;
-import by.andd3dfx.pravtor.crawler.PravtorWebCrawler;
+import by.andd3dfx.pravtor.crawler.PravtorRuWebCrawler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Comparator;
 
 public class MainApp {
 
-    private static final PravtorWebCrawler crawler = new PravtorWebCrawler();;
+    private static final PravtorRuWebCrawler crawler = new PravtorRuWebCrawler();;
     private static final FileUtil fileUtil = new FileUtil();
 
     public static void main(String[] args) throws IOException {

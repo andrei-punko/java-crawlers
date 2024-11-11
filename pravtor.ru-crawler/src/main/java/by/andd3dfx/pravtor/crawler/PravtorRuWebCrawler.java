@@ -11,10 +11,10 @@ import org.jsoup.select.Elements;
 import java.util.List;
 
 /**
- * Util to perform search on <a href="http://pravtor.ru">pravtor.ru</a> torrent tracker
+ * Crawler to extract data from <a href="https://pravtor.ru">pravtor.ru</a> torrent tracker
  */
 @Slf4j
-public class PravtorWebCrawler extends WebCrawler<TorrentData> {
+public class PravtorRuWebCrawler extends WebCrawler<TorrentData> {
 
     private static final String BASE_URL = "https://pravtor.ru/";
 

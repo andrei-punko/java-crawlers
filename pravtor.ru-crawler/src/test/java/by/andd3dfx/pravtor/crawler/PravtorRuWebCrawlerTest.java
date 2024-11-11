@@ -9,15 +9,15 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class PravtorWebCrawlerTest {
+public class PravtorRuWebCrawlerTest {
 
     private final String STARTING_URL = "https://pravtor.ru/viewforum.php?f=28";  // Святоотеческие тексты и жития святых
 
-    private PravtorWebCrawler crawler;
+    private PravtorRuWebCrawler crawler;
 
     @Before
     public void setup() {
-        crawler = new PravtorWebCrawler();
+        crawler = new PravtorRuWebCrawler();
     }
 
     @Test

@@ -7,14 +7,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
-public class RabotabyWebCrawlerTest {
+public class RabotaByWebCrawlerTest {
 
     private static final int RECORDS_PER_PAGE = 20;
-    private RabotabyWebCrawler crawler;
+    private RabotaByWebCrawler crawler;
 
     @Before
     public void setup() {
-        crawler = new RabotabyWebCrawler();
+        crawler = new RabotaByWebCrawler();
     }
 
     @Test
