@@ -23,7 +23,11 @@ public class RabotabyWebCrawlerTest {
         var result = crawler.singleSearch(pageUrl);
 
         assertThat("Next url should be present", result.nextPageUrl(), is(
-                "http://rabota.by/search/vacancy?area=1002&text=java&page=1&hhtmFrom=vacancy_search_list"));
+                """
+                        http://rabota.by/search/vacancy?area=1002&text=java&page=1\
+                        &hhtmFromLabel=vacancy_search_line\
+                        &hhtmFrom=vacancy_search_list\
+                        """));
         assertThat("At least 20 items expected", result.dataItems().size(), greaterThanOrEqualTo(RECORDS_PER_PAGE));
     }
 
