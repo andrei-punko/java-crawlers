@@ -92,7 +92,7 @@ public abstract class WebCrawler<T extends CrawlerData> {
 
         Elements elements = extractElements(document);
 
-        List<T> dataItems = elements.parallelStream()
+        List<T> dataItems = elements.stream()
                 .map(this::mapElementToData)
                 .toList();
         log.debug("Single search: url={}, items={}", pageUrl, dataItems.size());
