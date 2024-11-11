@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.Arrays;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -49,13 +50,7 @@ public class RabotabyWebCrawler extends WebCrawler<VacancyData> {
                 .url(document.baseUri())
                 .companyName(extractCompanyName(document))
                 .textContent(document.select("div[data-qa=vacancy-description]").text())
-                .keywords(document.select("span[data-qa=bloko-tag__text]")
-                        .stream()
-                        .map(Element::text)
-                        .flatMap(keyword -> Arrays.asList(keyword.split(", ")).stream())
-                        .flatMap(keyword -> Arrays.asList(keyword.split(" & ")).stream())
-                        .collect(Collectors.toSet())
-                )
+                .keywords(extractKeywords(document))
                 .addressString(extractAddressString(document))
                 .build();
     }
@@ -66,6 +61,15 @@ public class RabotabyWebCrawler extends WebCrawler<VacancyData> {
             return null;
         }
         return elements.getFirst().text();
+    }
+
+    private static Set<String> extractKeywords(Document document) {
+        return document.select("li[data-qa=skills-element]")
+                .stream()
+                .map(Element::text)
+                .flatMap(keyword -> Arrays.asList(keyword.split(", ")).stream())
+                .flatMap(keyword -> Arrays.asList(keyword.split(" & ")).stream())
+                .collect(Collectors.toSet());
     }
 
     private static String extractAddressString(Document document) {
