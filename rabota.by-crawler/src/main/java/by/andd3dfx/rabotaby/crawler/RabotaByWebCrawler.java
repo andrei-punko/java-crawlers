@@ -53,9 +53,9 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
         return VacancyData.builder()
                 .url(document.baseUri())
                 .companyName(extractCompanyName(document))
-                .textContent(document.select("div[data-qa=vacancy-description]").text())
+                .textContent(extractTextContent(document))
                 .keywords(extractKeywords(document))
-                .addressString(extractAddressString(document))
+                .address(extractAddress(document))
                 .build();
     }
 
@@ -67,6 +67,10 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
         return elements.getFirst().text();
     }
 
+    private static String extractTextContent(Document document) {
+        return document.select("div[data-qa=vacancy-description]").text();
+    }
+
     private static Set<String> extractKeywords(Document document) {
         return document.select("li[data-qa=skills-element]")
                 .stream()
@@ -76,7 +80,7 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
                 .collect(Collectors.toSet());
     }
 
-    private static String extractAddressString(Document document) {
+    private static String extractAddress(Document document) {
         var elements = document.select("span[data-qa=vacancy-view-raw-address]");
         if (elements.isEmpty()) {
             return null;
