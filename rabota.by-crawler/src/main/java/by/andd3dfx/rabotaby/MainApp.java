@@ -1,12 +1,14 @@
 package by.andd3dfx.rabotaby;
 
 import by.andd3dfx.rabotaby.crawler.RabotaByWebCrawler;
+import by.andd3dfx.rabotaby.dto.VacancyData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 
 public class MainApp {
 
@@ -36,7 +38,8 @@ public class MainApp {
         }
 
         var pageUrl = crawler.buildStartingSearchUrl("java");
-        var searchResult = crawler.batchSearch(pageUrl, pagesCap, timeoutMs);
+        var searchResult = crawler.batchSearch(pageUrl, pagesCap, timeoutMs)
+                .stream().sorted(Comparator.comparing(VacancyData::getUrl)).toList();
 
         var jsonString = objectMapper
                 .writerWithDefaultPrettyPrinter()
