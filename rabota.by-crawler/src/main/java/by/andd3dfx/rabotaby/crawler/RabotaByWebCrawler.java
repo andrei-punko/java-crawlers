@@ -22,7 +22,6 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
     private final String BASE_URL = "http://rabota.by";
 
     public String buildStartingSearchUrl(String searchString) {
-        // /search/vacancy?text=java&area=1002&hhtmFrom=main&hhtmFromLabel=vacancy_search_line
         final var format = BASE_URL + "/search/vacancy?area=1002&text=%s&page=%d&hhtmFromLabel=vacancy_search_line";
         return String.format(format, searchString, 0);
     }

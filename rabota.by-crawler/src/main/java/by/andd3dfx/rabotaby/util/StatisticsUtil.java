@@ -10,6 +10,9 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * Util to calculate some keywords statistics of vacancies
+ */
 public class StatisticsUtil {
 
     private Map<String, Integer> keywordToFreqMap = new HashMap<>();

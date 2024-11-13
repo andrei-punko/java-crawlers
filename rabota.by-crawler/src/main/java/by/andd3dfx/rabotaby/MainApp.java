@@ -10,8 +10,8 @@ import java.nio.file.Paths;
 
 public class MainApp {
 
-    private static RabotaByWebCrawler crawler = new RabotaByWebCrawler();
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static final RabotaByWebCrawler crawler = new RabotaByWebCrawler();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Start vacancies search process, store results into JSON file after that
