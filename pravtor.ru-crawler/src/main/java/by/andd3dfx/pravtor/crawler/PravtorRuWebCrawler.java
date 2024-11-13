@@ -8,8 +8,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.List;
-
 /**
  * Crawler to extract data from <a href="https://pravtor.ru">pravtor.ru</a> torrent tracker
  */
@@ -25,16 +23,13 @@ public class PravtorRuWebCrawler extends WebCrawler<TorrentData> {
 
     @Override
     protected String extractNextUrl(Document document) {
-        List<Element> pageItems = document
+        return document
                 .select("td[class=tRight vBottom nowrap small]")
                 .select("a").stream()
                 .filter(s -> s.text().contains("След."))
-                .toList();
-
-        if (pageItems.isEmpty()) {
-            return null;
-        }
-        return BASE_URL + pageItems.get(0).attr("href");
+                .findFirst()
+                .map(element -> BASE_URL + element.attr("href"))
+                .orElse(null);
     }
 
     @Override
@@ -57,9 +52,9 @@ public class PravtorRuWebCrawler extends WebCrawler<TorrentData> {
     }
 
     private Integer convertToInteger(String value) {
-        if (!StringUtils.isNumeric(value)) {
-            return null;
+        if (StringUtils.isNumeric(value)) {
+            return Integer.parseInt(value);
         }
-        return Integer.parseInt(value);
+        return null;
     }
 }
