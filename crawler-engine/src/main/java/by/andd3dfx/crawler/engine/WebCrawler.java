@@ -22,6 +22,8 @@ import java.util.List;
 public abstract class WebCrawler<T extends CrawlerData> {
 
     protected static final String USER_AGENT = "Mozilla";
+    private static final int DEFAULT_MAX_PAGES_CAP = 10;
+    private static final long DEFAULT_THROTTLING_DELAY_MS = 20;
 
     /**
      * Batch search using provided starting page URL, max pages cap 10 and throttling delay 20ms
@@ -30,7 +32,7 @@ public abstract class WebCrawler<T extends CrawlerData> {
      * @return list of retrieved items
      */
     public List<T> batchSearch(String pageUrl) {
-        return batchSearch(pageUrl, 10, 20);
+        return batchSearch(pageUrl, DEFAULT_MAX_PAGES_CAP);
     }
 
     /**
@@ -42,7 +44,7 @@ public abstract class WebCrawler<T extends CrawlerData> {
      * @return list of retrieved items
      */
     public List<T> batchSearch(String pageUrl, int maxPagesCap) {
-        return batchSearch(pageUrl, maxPagesCap, 20);
+        return batchSearch(pageUrl, maxPagesCap, DEFAULT_THROTTLING_DELAY_MS);
     }
 
     /**
