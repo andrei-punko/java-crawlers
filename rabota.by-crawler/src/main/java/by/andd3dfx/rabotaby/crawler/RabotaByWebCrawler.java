@@ -4,6 +4,7 @@ import by.andd3dfx.crawler.engine.WebCrawler;
 import by.andd3dfx.rabotaby.dto.VacancyData;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -53,9 +54,16 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
                 .url(document.baseUri())
                 .companyName(extractCompanyName(document))
                 .textContent(extractTextContent(document))
+                .salary(extractSalary(document))
                 .keywords(extractKeywords(document))
                 .address(extractAddress(document))
                 .build();
+    }
+
+    private String extractSalary(Document document) {
+        return StringUtils.trimToNull(
+                document.select("span[data-qa=vacancy-salary-compensation-type-net]").text()
+        );
     }
 
     private static String extractCompanyName(Document document) {
