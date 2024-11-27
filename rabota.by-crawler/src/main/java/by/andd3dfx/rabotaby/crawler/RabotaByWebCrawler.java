@@ -34,11 +34,13 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
 
     @Override
     protected String extractNextUrl(Document document) {
-        Elements nextPageItem = document.select("a[data-qa=pager-next]");
-        if (nextPageItem.isEmpty()) {
-            return null;
+        Elements pagesATags = document.select("a[data-qa=pager-page]");
+        Element currentPage = pagesATags.select("[aria-current=true]").getFirst();
+        int nextIndex = pagesATags.indexOf(currentPage) + 1;
+        if (nextIndex < pagesATags.size()) {
+            return BASE_URL + pagesATags.get(nextIndex).attr("href");
         }
-        return BASE_URL + nextPageItem.attr("href");
+        return null;
     }
 
     @SneakyThrows
@@ -47,8 +49,8 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
         String searchUrl = element.select("a").attr("href");
         log.info("Retrieve vacancy details for {}", searchUrl);
         Document document = Jsoup
-                    .connect(searchUrl)
-                    .userAgent(USER_AGENT).get();
+                .connect(searchUrl)
+                .userAgent(USER_AGENT).get();
 
         return VacancyData.builder()
                 .url(document.baseUri())
