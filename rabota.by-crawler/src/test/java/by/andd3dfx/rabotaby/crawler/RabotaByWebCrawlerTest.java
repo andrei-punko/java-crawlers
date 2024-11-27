@@ -3,7 +3,9 @@ package by.andd3dfx.rabotaby.crawler;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
@@ -22,12 +24,13 @@ public class RabotaByWebCrawlerTest {
         var pageUrl = crawler.buildStartingSearchUrl("java");
         var result = crawler.singleSearch(pageUrl);
 
-        assertThat("Next url should be present", result.nextPageUrl(), is(
+        assertThat(result.nextPageUrl(), startsWith(
                 """
                         http://rabota.by/search/vacancy?area=1002&text=java&page=1\
                         &hhtmFromLabel=vacancy_search_line\
-                        &hhtmFrom=vacancy_search_list\
+                        &searchSessionId=\
                         """));
+        assertThat(result.nextPageUrl(), endsWith("&hhtmFrom=vacancy_search_list"));
         assertThat("At least 20 items expected", result.dataItems().size(), greaterThanOrEqualTo(RECORDS_PER_PAGE));
     }
 
