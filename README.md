@@ -22,13 +22,15 @@ mvn clean install
 
 ## Crawler for Orthodox torrent tracker [pravtor.ru](http://pravtor.ru)
 
-Check [PravtorRuWebCrawler](pravtor.ru-crawler/src/main/java/by/andd3dfx/pravtor/crawler/PravtorRuWebCrawler.java) for details
+Check [PravtorRuWebCrawler](pravtor.ru-crawler/src/main/java/by/andd3dfx/pravtor/crawler/PravtorRuWebCrawler.java) for
+details
 
 To make search - use [run-search](pravtor.ru-crawler/run-search.bat) script in `pravtor.ru-crawler` folder.  
 Collected data will be placed into [result.xls](pravtor.ru-crawler/sandbox/result.xls) file in `sandbox` folder
 
 ## Crawler for vacancies aggregator [rabota.by](http://rabota.by) (localized version of [hh.ru](http://hh.ru) in Belarus)
 
-Check [RabotaByWebCrawler](rabota.by-crawler/src/main/java/by/andd3dfx/rabotaby/crawler/RabotaByWebCrawler.java) for details
+Check [RabotaByWebCrawler](rabota.by-crawler/src/main/java/by/andd3dfx/rabotaby/crawler/RabotaByWebCrawler.java) for
+details
 
 To make search - use [run-search](rabota.by-crawler/run-search.bat) script in `rabota.by-crawler` folder.
