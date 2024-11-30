@@ -62,12 +62,6 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
                 .build();
     }
 
-    private String extractSalary(Document document) {
-        return StringUtils.trimToNull(
-                document.select("span[data-qa=vacancy-salary-compensation-type-net]").text()
-        );
-    }
-
     private static String extractCompanyName(Document document) {
         var elements = document.select("a[data-qa=vacancy-company-name]");
         if (elements.isEmpty()) {
@@ -78,6 +72,12 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
 
     private static String extractTextContent(Document document) {
         return document.select("div[data-qa=vacancy-description]").text();
+    }
+
+    private String extractSalary(Document document) {
+        return StringUtils.trimToNull(
+                document.select("span[data-qa=vacancy-salary-compensation-type-net]").text()
+        );
     }
 
     private static Set<String> extractKeywords(Document document) {

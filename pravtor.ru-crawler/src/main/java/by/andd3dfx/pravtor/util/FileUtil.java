@@ -16,14 +16,14 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Util to work with files
+ * Util to work with files of types: text & excel
  */
 public class FileUtil {
 
     public static final String[] HEADER_LABELS = {"Название", "Seeds", "Peers", "Скачано", "Размер", "Ссылка"};
 
     /**
-     * Load list of search criteria items from file
+     * Load list of search criteria items from plain text file
      *
      * @param fileName name of params file
      * @return list of search criteria items

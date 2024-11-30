@@ -24,14 +24,14 @@ public class MainApp {
         var searchItems = new ArrayList<BatchSearchResult>();
         for (var searchCriteria : fileUtil.loadSearchCriteria(paramsFileName)) {
             String startingUrl = searchCriteria.url();
-            String label = searchCriteria.topic();
+            String topic = searchCriteria.topic();
 
             var result = crawler.batchSearch(startingUrl, -1, 20)
                     .stream()
                     .filter(torrentData -> torrentData.getDownloadedCount() != null)
                     .sorted(Comparator.comparingInt(TorrentData::getDownloadedCount).reversed())
                     .toList();
-            searchItems.add(new BatchSearchResult(label, result));
+            searchItems.add(new BatchSearchResult(topic, result));
         }
 
         fileUtil.writeIntoExcel(excelFileName, searchItems);

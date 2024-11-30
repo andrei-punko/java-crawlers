@@ -16,7 +16,7 @@ import java.util.List;
  * Web crawler for retrieving list of data with type T by consequent visiting of pages.
  * Process started using provided starting page URL; next link on each page retrieved from current page.
  *
- * @param <T> data type
+ * @param <T> data items type
  */
 @Slf4j
 public abstract class WebCrawler<T extends CrawlerData> {
@@ -24,6 +24,53 @@ public abstract class WebCrawler<T extends CrawlerData> {
     protected static final String USER_AGENT = "Mozilla";
     private static final int DEFAULT_MAX_PAGES_CAP = 10;
     private static final long DEFAULT_THROTTLING_DELAY_MS = 20;
+
+    /**
+     * Search and extract data from page with provided URL
+     *
+     * @param pageUrl URL of page
+     * @return search result
+     */
+    @SneakyThrows
+    public SingleSearchResult<T> singleSearch(String pageUrl) {
+        Document document = Jsoup
+                .connect(pageUrl)
+                .userAgent(USER_AGENT).get();
+
+        Elements elements = extractElements(document);
+
+        List<T> dataItems = elements.stream()
+                .map(this::mapElementToData)
+                .toList();
+        log.debug("Single search: url={}, items={}", pageUrl, dataItems.size());
+
+        String nextUrl = extractNextUrl(document);
+        return new SingleSearchResult<>(dataItems, nextUrl);
+    }
+
+    /**
+     * Extract elements from parsed Jsoup document
+     *
+     * @param document Jsoup document
+     * @return extracted elements
+     */
+    protected abstract Elements extractElements(Document document);
+
+    /**
+     * Extract next URL from parsed Jsoup document
+     *
+     * @param document Jsoup document
+     * @return next URL
+     */
+    protected abstract String extractNextUrl(Document document);
+
+    /**
+     * Map element to result DTO object
+     *
+     * @param element
+     * @return DTO object of type T
+     */
+    protected abstract T mapElementToData(Element element);
 
     /**
      * Batch search using provided starting page URL, max pages cap 10 and throttling delay 20ms
@@ -79,33 +126,4 @@ public abstract class WebCrawler<T extends CrawlerData> {
 
         return result;
     }
-
-    /**
-     * Search and extract data from page with provided URL
-     *
-     * @param pageUrl URL of page
-     * @return search result
-     */
-    @SneakyThrows
-    public SingleSearchResult<T> singleSearch(String pageUrl) {
-        Document document = Jsoup
-                .connect(pageUrl)
-                .userAgent(USER_AGENT).get();
-
-        Elements elements = extractElements(document);
-
-        List<T> dataItems = elements.stream()
-                .map(this::mapElementToData)
-                .toList();
-        log.debug("Single search: url={}, items={}", pageUrl, dataItems.size());
-
-        String nextUrl = extractNextUrl(document);
-        return new SingleSearchResult(dataItems, nextUrl);
-    }
-
-    protected abstract Elements extractElements(Document document);
-
-    protected abstract String extractNextUrl(Document document);
-
-    protected abstract T mapElementToData(Element element);
 }
