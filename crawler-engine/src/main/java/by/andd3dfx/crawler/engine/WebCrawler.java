@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 public abstract class WebCrawler<T extends CrawlerData> {
 
-    protected static final String USER_AGENT = "Mozilla";
+    private static final String USER_AGENT = "Mozilla";
     private static final int DEFAULT_MAX_PAGES_CAP = 10;
     private static final long DEFAULT_THROTTLING_DELAY_MS = 20;
 
@@ -45,9 +45,7 @@ public abstract class WebCrawler<T extends CrawlerData> {
      */
     @SneakyThrows
     public SingleSearchResult<T> singleSearch(String pageUrl, long throttlingDelayMs) {
-        Document document = Jsoup
-                .connect(pageUrl)
-                .userAgent(USER_AGENT).get();
+        Document document = retrieveDocument(pageUrl, throttlingDelayMs);
 
         Elements elements = extractElements(document);
 
@@ -58,6 +56,15 @@ public abstract class WebCrawler<T extends CrawlerData> {
 
         String nextUrl = extractNextUrl(document);
         return new SingleSearchResult<>(dataItems, nextUrl);
+    }
+
+    @SneakyThrows
+    protected Document retrieveDocument(String pageUrl, long throttlingDelayMs) {
+        Thread.sleep(throttlingDelayMs);
+
+        return Jsoup
+                .connect(pageUrl)
+                .userAgent(USER_AGENT).get();
     }
 
     /**
@@ -132,8 +139,6 @@ public abstract class WebCrawler<T extends CrawlerData> {
             pagesCounter++;
             result.addAll(dataItems);
             nextPage = searchResult.nextPageUrl();
-
-            Thread.sleep(throttlingDelayMs);
         }
         log.info("Total records retrieved: {}", result.size());
 

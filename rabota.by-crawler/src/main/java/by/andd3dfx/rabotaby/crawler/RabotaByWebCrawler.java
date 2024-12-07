@@ -46,13 +46,9 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
     @SneakyThrows
     @Override
     protected VacancyData mapElementToData(Element element, long throttlingDelayMs) {
-        Thread.sleep(throttlingDelayMs);
-
         String searchUrl = element.select("a").attr("href");
         log.info("Retrieve vacancy details for {}", searchUrl);
-        Document document = Jsoup
-                .connect(searchUrl)
-                .userAgent(USER_AGENT).get();
+        Document document = retrieveDocument(searchUrl, throttlingDelayMs);
 
         return VacancyData.builder()
                 .url(document.baseUri())
