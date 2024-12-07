@@ -14,6 +14,7 @@ public class VacancyData implements CrawlerData {
 
     private String url;
     private String companyName;
+    private String experience;
     private String textContent;
     private String salary;
     private Set<String> keywords;

@@ -55,6 +55,7 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
         return VacancyData.builder()
                 .url(document.baseUri())
                 .companyName(extractCompanyName(document))
+                .experience(extractExperience(document))
                 .textContent(extractTextContent(document))
                 .salary(extractSalary(document))
                 .keywords(extractKeywords(document))
@@ -68,6 +69,12 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
             return null;
         }
         return elements.getFirst().text();
+    }
+
+    private String extractExperience(Document document) {
+        return StringUtils.trimToNull(
+                document.select("span[data-qa=vacancy-experience]").text()
+        );
     }
 
     private static String extractTextContent(Document document) {

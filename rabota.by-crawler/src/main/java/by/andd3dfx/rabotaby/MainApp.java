@@ -3,6 +3,8 @@ package by.andd3dfx.rabotaby;
 import by.andd3dfx.rabotaby.crawler.RabotaByWebCrawler;
 import by.andd3dfx.rabotaby.dto.VacancyData;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 
+@Slf4j
 public class MainApp {
 
     private static final RabotaByWebCrawler crawler = new RabotaByWebCrawler();
@@ -38,11 +41,14 @@ public class MainApp {
         }
 
         var pageUrl = crawler.buildStartingSearchUrl("java");
-        var searchResult = crawler.batchSearch(pageUrl, pagesCap, timeoutMs)
-                .stream().sorted(Comparator
+        var vacancies = crawler.batchSearch(pageUrl, pagesCap, timeoutMs);
+        var searchResult = vacancies.stream()
+                .filter(vacancyData -> StringUtils.isNotBlank(vacancyData.getCompanyName()))
+                .sorted(Comparator
                         .comparing(VacancyData::getCompanyName)
                         .thenComparing(VacancyData::getUrl)
                 ).toList();
+        log.info("Records to save after filtering: {}", searchResult.size());
 
         var jsonString = objectMapper
                 .writerWithDefaultPrettyPrinter()
