@@ -33,7 +33,7 @@ public class PravtorRuWebCrawler extends WebCrawler<TorrentData> {
     }
 
     @Override
-    protected TorrentData mapElementToData(Element element) {
+    protected TorrentData mapElementToData(Element element, long throttlingDelayMs) {
         return TorrentData.builder()
                 .label(element.select("div[class=torTopic]").select("a").text())
                 .linkUrl(extractLink(element.select("a[class=torTopic]").attr("href")))

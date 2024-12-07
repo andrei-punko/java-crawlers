@@ -33,6 +33,18 @@ public abstract class WebCrawler<T extends CrawlerData> {
      */
     @SneakyThrows
     public SingleSearchResult<T> singleSearch(String pageUrl) {
+        return singleSearch(pageUrl, DEFAULT_THROTTLING_DELAY_MS);
+    }
+
+    /**
+     * Search and extract data from page with provided URL
+     *
+     * @param pageUrl           URL of page
+     * @param throttlingDelayMs delay between two consequent page requests, milliseconds
+     * @return search result
+     */
+    @SneakyThrows
+    public SingleSearchResult<T> singleSearch(String pageUrl, long throttlingDelayMs) {
         Document document = Jsoup
                 .connect(pageUrl)
                 .userAgent(USER_AGENT).get();
@@ -40,7 +52,7 @@ public abstract class WebCrawler<T extends CrawlerData> {
         Elements elements = extractElements(document);
 
         List<T> dataItems = elements.stream()
-                .map(this::mapElementToData)
+                .map(element -> mapElementToData(element, throttlingDelayMs))
                 .toList();
         log.debug("Single search: url={}, items={}", pageUrl, dataItems.size());
 
@@ -68,9 +80,10 @@ public abstract class WebCrawler<T extends CrawlerData> {
      * Map element to result DTO object
      *
      * @param element
+     * @param throttlingDelayMs delay between two consequent page requests, milliseconds
      * @return DTO object of type T
      */
-    protected abstract T mapElementToData(Element element);
+    protected abstract T mapElementToData(Element element, long throttlingDelayMs);
 
     /**
      * Batch search using provided starting page URL, max pages cap 10 and throttling delay 20ms
@@ -113,7 +126,7 @@ public abstract class WebCrawler<T extends CrawlerData> {
         List<T> result = new ArrayList<>();
 
         while (nextPage != null && (maxPagesCap == -1 || pagesCounter < maxPagesCap)) {
-            SingleSearchResult<T> searchResult = singleSearch(nextPage);
+            SingleSearchResult<T> searchResult = singleSearch(nextPage, throttlingDelayMs);
             List<T> dataItems = searchResult.dataItems();
             log.info("Hit №{}, {} items retrieved", pagesCounter, dataItems.size());
             pagesCounter++;
