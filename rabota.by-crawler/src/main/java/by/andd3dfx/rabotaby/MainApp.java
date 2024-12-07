@@ -39,7 +39,10 @@ public class MainApp {
 
         var pageUrl = crawler.buildStartingSearchUrl("java");
         var searchResult = crawler.batchSearch(pageUrl, pagesCap, timeoutMs)
-                .stream().sorted(Comparator.comparing(VacancyData::getUrl)).toList();
+                .stream().sorted(Comparator
+                        .comparing(VacancyData::getCompanyName)
+                        .thenComparing(VacancyData::getUrl)
+                ).toList();
 
         var jsonString = objectMapper
                 .writerWithDefaultPrettyPrinter()
