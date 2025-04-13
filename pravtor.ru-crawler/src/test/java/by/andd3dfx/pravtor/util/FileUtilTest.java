@@ -11,9 +11,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.dbunit.Assertion.assertEquals;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FileUtilTest {
 
@@ -32,13 +31,25 @@ public class FileUtilTest {
     public void loadSearchCriteria() throws IOException {
         List<SearchCriteria> criteriaItems = fileUtil.loadSearchCriteria(TEST_PARAMS_FILE);
 
-        assertThat("Wrong count of criteria items", criteriaItems.size(), is(2));
-        var item0 = criteriaItems.get(0);
-        assertThat("Wrong url of first item", item0.topic(), is("txt-molitvy"));
-        assertThat("Wrong label of first item", item0.url(), is("https://pravtor.ru/viewforum.php?f=184"));
+        assertThat(criteriaItems)
+                .as("Wrong count of criteria items")
+                .hasSize(2);
+
+        var item0 = criteriaItems.getFirst();
+        assertThat(item0.topic())
+                .as("Wrong url of first item")
+                .isEqualTo("txt-molitvy");
+        assertThat(item0.url())
+                .as("Wrong label of first item")
+                .isEqualTo("https://pravtor.ru/viewforum.php?f=184");
+
         var item1 = criteriaItems.get(1);
-        assertThat("Wrong label of second item", item1.topic(), is("txt-kanony"));
-        assertThat("Wrong url of second item", item1.url(), is("https://pravtor.ru/viewforum.php?f=183"));
+        assertThat(item1.topic())
+                .as("Wrong label of second item")
+                .isEqualTo("txt-kanony");
+        assertThat(item1.url())
+                .as("Wrong url of second item")
+                .isEqualTo("https://pravtor.ru/viewforum.php?f=183");
     }
 
     @Test

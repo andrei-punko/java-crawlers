@@ -12,9 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static by.andd3dfx.pravtor.util.FileUtil.HEADER_LABELS;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -39,19 +37,27 @@ public class MainAppTest {
 
         // Check output XLS content
         Workbook book = new HSSFWorkbook(new POIFSFileSystem(new File(RESULT_XLS_FILE)));
-        assertThat("Two sheets expected", book.getNumberOfSheets(), is(2));
-        assertThat("Unexpected name of first sheet", book.getSheetName(0), is("txt-molitvy"));
-        assertThat("Unexpected name of second sheet", book.getSheetName(1), is("txt-kanony"));
+        assertThat(book.getNumberOfSheets())
+                .as("Two sheets expected")
+                .isEqualTo(2);
+        assertThat(book.getSheetName(0))
+                .as("Unexpected name of first sheet")
+                .isEqualTo("txt-molitvy");
+        assertThat(book.getSheetName(1))
+                .as("Unexpected name of second sheet")
+                .isEqualTo("txt-kanony");
 
         for (int i = 0; i < HEADER_LABELS.length; i++) {
-            assertThat("Expected column name for sheet 0",
-                    book.getSheetAt(0).getRow(0).getCell(i).getStringCellValue(), is(HEADER_LABELS[i]));
-            assertThat("Expected column name for sheet 1",
-                    book.getSheetAt(1).getRow(0).getCell(i).getStringCellValue(), is(HEADER_LABELS[i]));
+            assertThat(book.getSheetAt(0).getRow(0).getCell(i).getStringCellValue())
+                    .as("Expected column name for sheet 0")
+                    .isEqualTo(HEADER_LABELS[i]);
+            assertThat(book.getSheetAt(1).getRow(0).getCell(i).getStringCellValue())
+                    .as("Expected column name for sheet 1")
+                    .isEqualTo(HEADER_LABELS[i]);
         }
 
-        assertThat(book.getSheetAt(0).getLastRowNum(),  greaterThanOrEqualTo(2));
-        assertThat(book.getSheetAt(1).getLastRowNum(), greaterThanOrEqualTo(2));
+        assertThat(book.getSheetAt(0).getLastRowNum()).isGreaterThanOrEqualTo(2);
+        assertThat(book.getSheetAt(1).getLastRowNum()).isGreaterThanOrEqualTo(2);
     }
 
     @Test
@@ -74,7 +80,8 @@ public class MainAppTest {
             mainApp.main(args);
             fail("Exception should be thrown");
         } catch (IllegalArgumentException iae) {
-            assertThat(iae.getMessage(), is("Two 2 params should be provided: paramsFileName & excelFileName!"));
+            assertThat(iae.getMessage())
+                    .isEqualTo("Two 2 params should be provided: paramsFileName & excelFileName!");
         }
     }
 }

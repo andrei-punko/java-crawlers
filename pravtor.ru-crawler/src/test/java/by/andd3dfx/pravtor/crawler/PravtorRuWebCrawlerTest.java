@@ -6,8 +6,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PravtorRuWebCrawlerTest {
 
@@ -24,13 +23,13 @@ public class PravtorRuWebCrawlerTest {
     public void batchSearch() {
         List<TorrentData> result = crawler.batchSearch(STARTING_URL, 2, 20);
 
-        assertThat("Wrong amount of result records", result.size(), is(100));
+        assertThat(result).as("Wrong amount of result records").hasSize(100);
     }
 
     @Test
     public void singleSearch() {
         var result = crawler.singleSearch(STARTING_URL);
 
-        assertThat("Wrong amount of result records", result.dataItems().size(), is(50));
+        assertThat(result.dataItems()).as("Wrong amount of result records").hasSize(50);
     }
 }
