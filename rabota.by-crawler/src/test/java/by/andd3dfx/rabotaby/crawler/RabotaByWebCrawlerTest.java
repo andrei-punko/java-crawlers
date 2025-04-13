@@ -18,7 +18,7 @@ public class RabotaByWebCrawlerTest {
     @Test
     public void singleSearch() {
         var pageUrl = crawler.buildStartingSearchUrl("java");
-        var result = crawler.singleSearch(pageUrl);
+        var result = crawler.singleSearch(pageUrl, 100);
 
         assertThat(result.nextPageUrl()).startsWith(
                 """
@@ -35,7 +35,7 @@ public class RabotaByWebCrawlerTest {
     @Test
     public void batchSearch() {
         var pageUrl = crawler.buildStartingSearchUrl("java");
-        var searchResult = crawler.batchSearch(pageUrl, 2);
+        var searchResult = crawler.batchSearch(pageUrl, 2, 100);
 
         assertThat(searchResult.size()).isEqualTo(2 * RECORDS_PER_PAGE);
     }
