@@ -58,7 +58,26 @@ public class RabotaByWebCrawler extends WebCrawler<VacancyData> {
                 .salary(extractSalary(document))
                 .keywords(extractKeywords(document))
                 .address(extractAddress(document))
+                .workFormat(extractWorkFormat(document))
                 .build();
+    }
+
+    /**
+     * Структурированное поле вакансии на hh/rabota: «Формат работы» (удалённо, гибрид, на месте работодателя, …).
+     */
+    private static String extractWorkFormat(Document document) {
+        String raw = StringUtils.trimToNull(document.select("p[data-qa=work-formats-text]").text());
+        if (raw == null) {
+            return null;
+        }
+        String label = "Формат работы";
+        if (raw.length() > label.length() && raw.substring(0, label.length()).equalsIgnoreCase(label)) {
+            int colon = raw.indexOf(':');
+            if (colon >= 0) {
+                return StringUtils.trimToNull(raw.substring(colon + 1));
+            }
+        }
+        return raw;
     }
 
     private static String extractCompanyName(Document document) {

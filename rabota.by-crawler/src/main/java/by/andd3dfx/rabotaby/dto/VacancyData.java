@@ -19,4 +19,6 @@ public class VacancyData implements CrawlerData {
     private String salary;
     private Set<String> keywords;
     private String address;
+    /** Как на сайте: «удалённо», «гибрид», «на месте работодателя» и т.д. — из {@code p[data-qa=work-formats-text]}. */
+    private String workFormat;
 }
