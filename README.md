@@ -35,6 +35,13 @@ details
 
 To make search - use [run-search](rabota.by-crawler/run-search.bat) script in [rabota.by-crawler folder](rabota.by-crawler).
 
+## Crawler for [Onlíner](https://catalog.onliner.by/) CPU catalog (AM4)
+
+Check [OnlinerByCpuCrawler](onliner.by-crawler/src/main/java/by/andd3dfx/onliner/crawler/OnlinerByCpuCrawler.java) for details.
+It reads the JSON-LD `ItemList` from catalog pages (filters: `socket_cpu[0]=am4`, `price[from]=1`).
+
+To run — use [run-search](onliner.by-crawler/run-search.bat) in the [onliner.by-crawler](onliner.by-crawler) folder after `mvn package` (output JSON path and optional args are set in the script).
+
 ## Video with description of the project
 
 [![YouTube link](https://markdown-videos-api.jorgenkh.no/url?url=https%3A%2F%2Fyoutu.be%2F4qxvkALcWjQ)](https://youtu.be/4qxvkALcWjQ)

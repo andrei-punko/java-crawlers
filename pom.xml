@@ -26,6 +26,7 @@
     <module>crawler-engine</module>
     <module>pravtor.ru-crawler</module>
     <module>rabota.by-crawler</module>
+    <module>onliner.by-crawler</module>
   </modules>
 
   <dependencyManagement>
