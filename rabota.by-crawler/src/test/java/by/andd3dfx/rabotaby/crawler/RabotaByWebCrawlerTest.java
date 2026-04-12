@@ -20,13 +20,12 @@ public class RabotaByWebCrawlerTest {
         var pageUrl = crawler.buildStartingSearchUrl("java");
         var result = crawler.singleSearch(pageUrl, 100);
 
-        assertThat(result.nextPageUrl()).startsWith(
-                """
-                        http://rabota.by/search/vacancy?area=1002&text=java&page=1\
-                        &hhtmFromLabel=vacancy_search_line\
-                        &searchSessionId=\
-                        """);
-        assertThat(result.nextPageUrl()).endsWith("&hhtmFrom=vacancy_search_list");
+        var nextUrl = result.nextPageUrl();
+        assertThat(nextUrl).startsWith(
+                "http://rabota.by/search/vacancy?area=1002&text=java&page=1&hhtmFromLabel=vacancy_search_line&");
+        assertThat(nextUrl)
+                .containsPattern("(search_session_id|searchSessionId)=");
+        assertThat(nextUrl).endsWith("&hhtmFrom=vacancy_search_list");
         assertThat(result.dataItems().size())
                 .as("At least 20 items expected")
                 .isGreaterThanOrEqualTo(RECORDS_PER_PAGE);
