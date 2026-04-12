@@ -60,17 +60,18 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
                 continue;
             }
             String description = textOrNull(product, "description");
+            String name = textOrNull(product, "name");
             JsonNode offers = product.path("offers");
             items.add(ProcessorData.builder()
-                    .name(textOrNull(product, "name"))
+                    .name(name)
                     .brand(extractBrand(product))
                     .url(textOrNull(offers, "url"))
                     .price(offers.hasNonNull("price") ? offers.get("price").asText() : null)
                     .currency(textOrNull(offers, "priceCurrency"))
                     .description(description)
                     .socket("AM4")
-                    .coreCount(ProcessorDescriptionParser.parseCoreCount(description))
-                    .threadCount(ProcessorDescriptionParser.parseThreadCount(description))
+                    .coreCount(ProcessorDescriptionParser.parseCoreCount(description, name))
+                    .threadCount(ProcessorDescriptionParser.parseThreadCount(description, name))
                     .maxFrequencyGHz(ProcessorDescriptionParser.parseMaxFrequencyGHz(description))
                     .build());
         }

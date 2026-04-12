@@ -4,6 +4,8 @@ import java.util.regex.Pattern;
 
 /**
  * Извлекает числовые характеристики из краткой строки описания процессора в каталоге Onliner.
+ * Если в описании нет «N ядер / потоков» (часто у Bristol Ridge и Athlon X4), для имени вида
+ * {@code Athlon X4 …} подставляется число из суффикса X4 (ядра = потоки, без SMT).
  */
 public final class ProcessorDescriptionParser {
 
@@ -23,10 +25,42 @@ public final class ProcessorDescriptionParser {
     private static final Pattern FREQ_SINGLE = Pattern.compile(
             "частота\\s*([\\d.,]+)\\s*ггц", RE_FLAGS);
 
+    /** Athlon X4 950 → 4 ядра (и 4 потока). */
+    private static final Pattern ATHLON_X_CORES = Pattern.compile(
+            "(?i)Athlon\\s+X(\\d+)", RE_FLAGS);
+
     private ProcessorDescriptionParser() {
     }
 
     public static Integer parseCoreCount(String description) {
+        return parseCoreCount(description, null);
+    }
+
+    public static Integer parseCoreCount(String description, String productName) {
+        Integer fromDesc = parseCoreCountFromDescription(description);
+        if (fromDesc != null) {
+            return fromDesc;
+        }
+        return athlonXCoreCount(productName);
+    }
+
+    public static Integer parseThreadCount(String description) {
+        return parseThreadCount(description, null);
+    }
+
+    public static Integer parseThreadCount(String description, String productName) {
+        Integer fromDesc = parseThreadCountFromDescription(description);
+        if (fromDesc != null) {
+            return fromDesc;
+        }
+        Integer fromAthlonX = athlonXCoreCount(productName);
+        if (fromAthlonX != null) {
+            return fromAthlonX;
+        }
+        return null;
+    }
+
+    private static Integer parseCoreCountFromDescription(String description) {
         if (description == null || description.isBlank()) {
             return null;
         }
@@ -34,11 +68,19 @@ public final class ProcessorDescriptionParser {
         return m.find() ? Integer.valueOf(m.group(1)) : null;
     }
 
-    public static Integer parseThreadCount(String description) {
+    private static Integer parseThreadCountFromDescription(String description) {
         if (description == null || description.isBlank()) {
             return null;
         }
         var m = THREADS.matcher(description);
+        return m.find() ? Integer.valueOf(m.group(1)) : null;
+    }
+
+    private static Integer athlonXCoreCount(String productName) {
+        if (productName == null || productName.isBlank()) {
+            return null;
+        }
+        var m = ATHLON_X_CORES.matcher(productName);
         return m.find() ? Integer.valueOf(m.group(1)) : null;
     }
 

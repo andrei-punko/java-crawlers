@@ -41,4 +41,14 @@ public class ProcessorDescriptionParserTest {
         assertThat(ProcessorDescriptionParser.parseThreadCount("без потоковой строки")).isNull();
         assertThat(ProcessorDescriptionParser.parseMaxFrequencyGHz("без слова ггц")).isNull();
     }
+
+    /** Onliner иногда не пишет «N ядер» в описании, но в названии есть Athlon X4. */
+    @Test
+    public void athlonX4_fillsCoresAndThreadsFromName() {
+        var desc = "2017 г, Bristol Ridge, сокет AM4, частота 3.8/3.5 ГГц, кэш 2 МБ + , техпроцесс 28 нм";
+        var name = "AMD Athlon X4 950";
+        assertThat(ProcessorDescriptionParser.parseCoreCount(desc, name)).isEqualTo(4);
+        assertThat(ProcessorDescriptionParser.parseThreadCount(desc, name)).isEqualTo(4);
+    }
 }
+
