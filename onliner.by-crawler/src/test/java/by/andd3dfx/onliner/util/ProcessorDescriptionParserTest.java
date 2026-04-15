@@ -2,6 +2,8 @@ package by.andd3dfx.onliner.util;
 
 import org.junit.Test;
 
+import static by.andd3dfx.onliner.util.ProcessorDescriptionParser.DEFAULT_CORE_COUNT;
+import static by.andd3dfx.onliner.util.ProcessorDescriptionParser.DEFAULT_THREAD_COUNT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProcessorDescriptionParserTest {
@@ -37,8 +39,8 @@ public class ProcessorDescriptionParserTest {
 
     @Test
     public void nullForMissingFragments() {
-        assertThat(ProcessorDescriptionParser.parseCoreCount(null)).isNull();
-        assertThat(ProcessorDescriptionParser.parseThreadCount("без потоковой строки")).isNull();
+        assertThat(ProcessorDescriptionParser.parseCoreCount(null)).isEqualTo(DEFAULT_CORE_COUNT);
+        assertThat(ProcessorDescriptionParser.parseThreadCount("без потоковой строки")).isEqualTo(DEFAULT_THREAD_COUNT);
         assertThat(ProcessorDescriptionParser.parseMaxFrequencyGHz("без слова ггц")).isNull();
     }
 
