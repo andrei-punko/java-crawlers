@@ -18,10 +18,8 @@ public class ProcessorData implements CrawlerData {
     /** Краткая строка характеристик из каталога (в т.ч. сокет, ядра, частота). */
     private String description;
     private String socket;
-    /** Вычисляется из {@link #description}. */
     private Integer coreCount;
-    /** Вычисляется из {@link #description}. */
     private Integer threadCount;
-    /** Вычисляется из {@link #description}, ГГц (максимум из пары turbo/base). */
+    /** максимум из пары turbo/base */
     private Double maxFrequencyGHz;
 }
