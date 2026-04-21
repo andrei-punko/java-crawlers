@@ -42,7 +42,6 @@ public class OnlinerByCpuCrawlerTest {
 
         assertThat(result.dataItems()).hasSize(1);
         var cpu = result.dataItems().getFirst();
-        assertThat(cpu.getSocket()).isEqualTo("AM4");
         assertThat(cpu.getCoreCount()).isEqualTo(8);
         assertThat(cpu.getThreadCount()).isEqualTo(16);
         assertThat(cpu.getMaxFrequencyGHz()).isEqualTo(4.7);
@@ -72,12 +71,10 @@ public class OnlinerByCpuCrawlerTest {
                             "@type": "Product",
                             "name": "AMD Ryzen 7 5700X",
                             "description": "Короткое описание без ядер и потоков",
-                            "brand": {"@type":"Brand","name":"AMD"},
                             "offers": {
                               "@type": "Offer",
                               "url": "https://catalog.onliner.by/cpu/amd/ryzen75700x",
-                              "price": "500",
-                              "priceCurrency": "BYN"
+                              "price": "500"
                             }
                           }
                         }
@@ -93,7 +90,6 @@ public class OnlinerByCpuCrawlerTest {
             String html = """
                     <html><body>
                     <table>
-                      <tr><td>Сокет</td><td>AM4</td></tr>
                       <tr><td>Количество ядер</td><td>8</td></tr>
                       <tr><td>Количество потоков</td><td>16</td></tr>
                       <tr><td>Максимальная частота</td><td>4700 МГц</td></tr>

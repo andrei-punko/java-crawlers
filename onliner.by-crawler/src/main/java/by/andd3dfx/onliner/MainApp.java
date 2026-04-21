@@ -48,8 +48,7 @@ public class MainApp {
         var sorted = processors.stream()
                 .filter(p -> p.getName() != null && !p.getName().isBlank())
                 .sorted(Comparator
-                        .comparing(ProcessorData::getBrand, Comparator.nullsLast(String::compareToIgnoreCase))
-                        .thenComparing(ProcessorData::getName, String::compareToIgnoreCase))
+                        .comparing(ProcessorData::getName, String::compareToIgnoreCase))
                 .toList();
         log.info("После фильтрации к сохранению: {} записей", sorted.size());
 

@@ -11,13 +11,10 @@ import lombok.Data;
 public class ProcessorData implements CrawlerData {
 
     private String name;
-    private String brand;
     private String url;
     private String price;
-    private String currency;
     /** Краткая строка характеристик из каталога (в т.ч. сокет, ядра, частота). */
     private String description;
-    private String socket;
     private Integer coreCount;
     private Integer threadCount;
     /** максимум из пары turbo/base */

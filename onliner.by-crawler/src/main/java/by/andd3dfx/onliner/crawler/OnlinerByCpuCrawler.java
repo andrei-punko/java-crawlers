@@ -66,12 +66,9 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
             CpuSpecs specs = extractCpuSpecsFromDetailPage(productUrl, throttlingDelayMs);
             items.add(ProcessorData.builder()
                     .name(name)
-                    .brand(extractBrand(product))
                     .url(productUrl)
                     .price(offers.hasNonNull("price") ? offers.get("price").asText() : null)
-                    .currency(textOrNull(offers, "priceCurrency"))
                     .description(description)
-                    .socket(specs.socket())
                     .coreCount(specs.coreCount())
                     .threadCount(specs.threadCount())
                     .maxFrequencyGHz(specs.maxFrequencyGHz())
@@ -122,17 +119,6 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
         return t.isBlank() ? null : t;
     }
 
-    private static String extractBrand(JsonNode product) {
-        JsonNode brand = product.path("brand");
-        if (brand.isObject()) {
-            return textOrNull(brand, "name");
-        }
-        if (brand.isTextual()) {
-            return brand.asText();
-        }
-        return null;
-    }
-
     private CpuSpecs extractCpuSpecsFromDetailPage(String productUrl, long throttlingDelayMs) {
         if (productUrl == null || productUrl.isBlank()) {
             return CpuSpecs.EMPTY;
@@ -140,7 +126,6 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
 
         try {
             Document detailDoc = retrieveDocument(productUrl, throttlingDelayMs);
-            String socket = normalizeSocket(findSpecValue(detailDoc, "сокет"));
             Integer coreCount = parseInteger(findSpecValue(detailDoc, "количество ядер"));
             Integer threadCount = parseInteger(findSpecValue(detailDoc, "количество потоков"));
 
@@ -149,7 +134,7 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
                 maxFrequencyGHz = parseFrequencyGHz(findSpecValue(detailDoc, "тактовая частота"));
             }
 
-            return new CpuSpecs(socket, coreCount, threadCount, maxFrequencyGHz);
+            return new CpuSpecs(coreCount, threadCount, maxFrequencyGHz);
         } catch (Exception e) {
             log.warn("Не удалось получить детали CPU со страницы {}: {}", productUrl, e.getMessage());
             return CpuSpecs.EMPTY;
@@ -162,8 +147,9 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
             if (allCells.size() < 2) {
                 continue;
             }
+
             String key = allCells.getFirst().text();
-            if (!labelMatches(key, labelPartLowerCase)) {
+            if (labelDoNotMatches(key, labelPartLowerCase)) {
                 continue;
             }
             return textOrNull(allCells.get(1).text());
@@ -172,9 +158,10 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
         for (Element dl : detailDoc.select("dl")) {
             Elements terms = dl.select("dt");
             for (Element term : terms) {
-                if (!labelMatches(term.text(), labelPartLowerCase)) {
+                if (labelDoNotMatches(term.text(), labelPartLowerCase)) {
                     continue;
                 }
+
                 Element valueNode = term.nextElementSibling();
                 if (valueNode != null && "dd".equalsIgnoreCase(valueNode.tagName())) {
                     return textOrNull(valueNode.text());
@@ -187,8 +174,9 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
             if (text == null || !text.contains(":")) {
                 continue;
             }
+
             String key = text.substring(0, text.indexOf(':'));
-            if (!labelMatches(key, labelPartLowerCase)) {
+            if (labelDoNotMatches(key, labelPartLowerCase)) {
                 continue;
             }
             String value = text.substring(text.indexOf(':') + 1).trim();
@@ -201,6 +189,7 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
         if (raw == null) {
             return null;
         }
+
         var m = Pattern.compile("\\b(\\d{1,2})\\b").matcher(raw);
         if (!m.find()) {
             return null;
@@ -213,6 +202,7 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
         if (raw == null) {
             return null;
         }
+
         String normalized = raw.toLowerCase(Locale.ROOT)
                 .replace('\u00A0', ' ')
                 .replace("mhz", "мгц")
@@ -222,6 +212,7 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
         if (!m.find()) {
             return null;
         }
+
         double value = Double.parseDouble(m.group(1).replace(',', '.'));
         String unit = m.group(2).toLowerCase(Locale.ROOT);
         if (unit.contains("мгц") || unit.contains("mhz")) {
@@ -234,26 +225,30 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
         if (value == null) {
             return null;
         }
+
         String trimmed = value.trim();
         return trimmed.isBlank() ? null : trimmed;
     }
 
-    private static boolean labelMatches(String sourceLabel, String expectedLabelLowerCase) {
+    private static boolean labelDoNotMatches(String sourceLabel, String expectedLabelLowerCase) {
         if (sourceLabel == null) {
-            return false;
+            return true;
         }
+
         String normalized = sourceLabel.toLowerCase(Locale.ROOT).replaceAll("[^\\p{L}\\p{N} ]", " ").trim();
-        return normalized.contains(expectedLabelLowerCase);
+        return !normalized.contains(expectedLabelLowerCase);
     }
 
     private static String normalizeSocket(String raw) {
         if (raw == null) {
             return null;
         }
+
         var am = Pattern.compile("\\b(am\\s*\\d)\\b", Pattern.CASE_INSENSITIVE).matcher(raw);
         if (am.find()) {
             return am.group(1).toUpperCase(Locale.ROOT).replace(" ", "");
         }
+
         var lga = Pattern.compile("\\b(lga\\s*\\d{3,4})\\b", Pattern.CASE_INSENSITIVE).matcher(raw);
         if (lga.find()) {
             return lga.group(1).toUpperCase(Locale.ROOT).replace(" ", "");
@@ -261,8 +256,8 @@ public class OnlinerByCpuCrawler extends WebCrawler<ProcessorData> {
         return null;
     }
 
-    private record CpuSpecs(String socket, Integer coreCount, Integer threadCount, Double maxFrequencyGHz) {
-        private static final CpuSpecs EMPTY = new CpuSpecs(null, null, null, null);
+    private record CpuSpecs(Integer coreCount, Integer threadCount, Double maxFrequencyGHz) {
+        private static final CpuSpecs EMPTY = new CpuSpecs(null, null, null);
     }
 
     @Override
