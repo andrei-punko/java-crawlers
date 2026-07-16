@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -29,7 +30,7 @@ public class FileUtil {
      * @return list of search criteria items
      */
     public List<SearchCriteria> loadSearchCriteria(String fileName) throws IOException {
-        return Files.readAllLines(Paths.get(fileName)).stream()
+        return Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8).stream()
                 .filter(line -> StringUtils.isNotBlank(line) && !line.startsWith("#"))
                 .map(line -> {
                     final String[] items = line.split(" ");

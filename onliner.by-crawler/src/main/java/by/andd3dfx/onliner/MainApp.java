@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,6 +56,6 @@ public class MainApp {
         var jsonString = objectMapper
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(sorted);
-        Files.write(path, jsonString.getBytes());
+        Files.writeString(path, jsonString, StandardCharsets.UTF_8);
     }
 }

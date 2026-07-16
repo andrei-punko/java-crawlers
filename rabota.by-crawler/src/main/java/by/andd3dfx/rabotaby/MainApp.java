@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,6 +54,7 @@ public class MainApp {
         var jsonString = objectMapper
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(searchResult);
-        Files.write(path, jsonString.getBytes());
+        // Explicit UTF-8: String.getBytes() would follow file.encoding (often Cp1251 on Windows).
+        Files.writeString(path, jsonString, StandardCharsets.UTF_8);
     }
 }
