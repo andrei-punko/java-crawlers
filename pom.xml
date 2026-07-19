@@ -27,6 +27,7 @@
     <module>pravtor.ru-crawler</module>
     <module>rabota.by-crawler</module>
     <module>onliner.by-crawler</module>
+    <module>tabor.ru-crawler</module>
   </modules>
 
   <dependencyManagement>

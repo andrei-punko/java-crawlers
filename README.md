@@ -42,6 +42,16 @@ It reads the JSON-LD `ItemList` from catalog pages (filters: `socket_cpu[0]=am4`
 
 To run — use [run-search](onliner.by-crawler/run-search.bat) in the [onliner.by-crawler](onliner.by-crawler) folder after `mvn package` (output JSON path and optional args are set in the script).
 
+## Crawler for dating site [tabor.ru](https://tabor.ru) (women in Minsk, age 25–45)
+
+Check [TaborRuWebCrawler](tabor.ru-crawler/src/main/java/by/andd3dfx/tabor/crawler/TaborRuWebCrawler.java) for details.
+It searches women profiles in Minsk (age 25–45) that have a cover photo, opens each profile, and downloads only that photo.
+
+To run — use [run-search](tabor.ru-crawler/run-search.bat) in the [tabor.ru-crawler](tabor.ru-crawler) folder after `mvn package`
+(output: `profiles.json`, `photos/`, log file `tabor-crawler.log`).
+
+Args: `outputJson [pagesCap] [delayMs] [minAge] [maxAge]` — e.g. `profiles.json -1 500 25 45`.
+
 ## Video with description of the project
 
 [![YouTube link](https://markdown-videos-api.jorgenkh.no/url?url=https%3A%2F%2Fyoutu.be%2F4qxvkALcWjQ)](https://youtu.be/4qxvkALcWjQ)
