@@ -15,19 +15,33 @@ public class ProfileData implements CrawlerData {
     private String name;
     private Integer age;
     private String city;
-    private String country;
     private String photoUrl;
     private String photoPath;
+    /** Короткий статус со страницы анкеты. */
+    private String statusText;
     private String lookingFor;
     private String purpose;
+    private String importantInPartner;
+    private String lifePriorities;
+    private String characterTraits;
+    private String interestsAndHobbies;
     private String height;
     private String weight;
     private String bodyType;
     private String eyeColor;
+    private String appearance;
     private String maritalStatus;
+    private String relationshipStatus;
     private String children;
+    private String education;
     private String occupation;
-    /** Значение поля «Отношение к курению» с анкеты. */
+    private String activity;
+    private String housing;
+    /** «Материальное положение». */
+    private String materialStatus;
+    private String materialSupport;
     private String smoking;
+    private String alcohol;
+    /** Текст поля «О себе». */
     private String aboutText;
 }

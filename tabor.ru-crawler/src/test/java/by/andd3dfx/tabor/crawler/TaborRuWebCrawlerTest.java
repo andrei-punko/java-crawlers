@@ -49,17 +49,30 @@ public class TaborRuWebCrawlerTest {
         assertThat(profile.getName()).isEqualTo("Анна");
         assertThat(profile.getAge()).isEqualTo(30);
         assertThat(profile.getCity()).isEqualTo("Минск");
-        assertThat(profile.getCountry()).isEqualTo("Беларусь");
         assertThat(profile.getPhotoUrl()).contains("800x600.jpg");
+        assertThat(profile.getStatusText()).isEqualTo("Привет всем");
         assertThat(profile.getPurpose()).isEqualTo("любовь и отношения");
+        assertThat(profile.getImportantInPartner()).isEqualTo("ум");
+        assertThat(profile.getLifePriorities()).isEqualTo("семья и карьера");
+        assertThat(profile.getCharacterTraits()).isEqualTo("спокойная, целеустремленная");
+        assertThat(profile.getInterestsAndHobbies()).isEqualTo("путешествия, спорт");
         assertThat(profile.getHeight()).isEqualTo("170 см.");
         assertThat(profile.getWeight()).isEqualTo("60 кг.");
         assertThat(profile.getBodyType()).isEqualTo("обычное");
         assertThat(profile.getEyeColor()).isEqualTo("зеленый");
+        assertThat(profile.getAppearance()).isEqualTo("обыкновенная");
         assertThat(profile.getMaritalStatus()).isEqualTo("не замужем");
+        assertThat(profile.getRelationshipStatus()).isEqualTo("в активном поиске");
         assertThat(profile.getChildren()).isEqualTo("нет");
+        assertThat(profile.getEducation()).isEqualTo("высшее");
         assertThat(profile.getSmoking()).isEqualTo("не курю");
+        assertThat(profile.getAlcohol()).isEqualTo("не пью");
         assertThat(profile.getOccupation()).isEqualTo("дизайнер");
+        assertThat(profile.getActivity()).isEqualTo("IT");
+        assertThat(profile.getHousing()).isEqualTo("своя квартира");
+        assertThat(profile.getMaterialStatus()).isEqualTo("среднее");
+        assertThat(profile.getMaterialSupport()).isEqualTo("не нуждаюсь в спонсоре");
+        assertThat(profile.getAboutText()).contains("люблю путешествия");
         assertThat(profile.getLookingFor()).contains("Ищу");
     }
 
@@ -70,10 +83,47 @@ public class TaborRuWebCrawlerTest {
     }
 
     @Test
+    public void extractNextUrlFallsBackToIncrementingPage() {
+        var crawler = new TaborRuWebCrawler();
+        String html = """
+                <html><body>
+                <ul class="search-list">
+                  <li class="search-list__item">x</li>
+                </ul>
+                </body></html>
+                """;
+        Document document = Jsoup.parse(html,
+                "https://tabor.ru/search?page=80&search%5Bage%5D=25%3B45&search%5Bfind_sex%5D=2");
+
+        assertThat(crawler.extractNextUrl(document))
+                .isEqualTo("https://tabor.ru/search?page=81&search%5Bage%5D=25%3B45&search%5Bfind_sex%5D=2");
+    }
+
+    @Test
+    public void extractNextUrlStopsOnEmptyListing() {
+        var crawler = new TaborRuWebCrawler();
+        Document document = Jsoup.parse("<html><body></body></html>",
+                "https://tabor.ru/search?page=1001&search%5Bage%5D=25%3B45");
+        assertThat(crawler.extractNextUrl(document)).isNull();
+    }
+
+    @Test
+    public void incrementPageUrl() {
+        assertThat(TaborRuWebCrawler.incrementPageUrl(
+                "https://tabor.ru/search?page=80&search%5Bage%5D=25%3B45"))
+                .isEqualTo("https://tabor.ru/search?page=81&search%5Bage%5D=25%3B45");
+        assertThat(TaborRuWebCrawler.incrementPageUrl("https://tabor.ru/search?search%5Bage%5D=25%3B45"))
+                .isEqualTo("https://tabor.ru/search?search%5Bage%5D=25%3B45&page=2");
+    }
+
+    @Test
     public void matchesSearchCriteria() {
         var crawler = new TaborRuWebCrawler();
         assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
                 .age(30).city("Минск")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isTrue();
+        assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
+                .city("Минск")
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isTrue();
         assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
                 .age(30).city("Минск").children("нет")
@@ -91,6 +141,24 @@ public class TaborRuWebCrawlerTest {
                 .age(30).city("Минск").smoking("курю")
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();
         assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
+                .age(30).city("Минск").alcohol("люблю выпить")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();
+        assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
+                .age(30).city("Минск").materialSupport("ищу спонсора")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();
+        assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
+                .age(30).city("Минск").maritalStatus("замужем")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();
+        assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
+                .age(30).city("Минск").maritalStatus("не замужем")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isTrue();
+        assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
+                .age(30).city("Минск").weight("80 кг.")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isTrue();
+        assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
+                .age(30).city("Минск").weight("81 кг.")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();
+        assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
                 .age(30).city("Минск").smoking("не курю")
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isTrue();
         assertThat(crawler.rejectionReason(ProfileData.builder()
@@ -101,6 +169,32 @@ public class TaborRuWebCrawlerTest {
                 .age(30).city("Минск").children("есть, живем вместе")
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build()))
                 .isEqualTo("children: есть, живем вместе");
+        assertThat(crawler.rejectionReason(ProfileData.builder()
+                .age(30).city("Минск").alcohol("люблю выпить")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build()))
+                .isEqualTo("alcohol: люблю выпить");
+        assertThat(crawler.rejectionReason(ProfileData.builder()
+                .age(30).city("Минск").materialSupport("ищу спонсора")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build()))
+                .isEqualTo("materialSupport: ищу спонсора");
+        assertThat(crawler.rejectionReason(ProfileData.builder()
+                .age(30).city("Минск").maritalStatus("замужем")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build()))
+                .isEqualTo("maritalStatus: замужем");
+        assertThat(crawler.rejectionReason(ProfileData.builder()
+                .age(30).city("Минск").education("среднее")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build()))
+                .isEqualTo("education: среднее");
+        assertThat(crawler.rejectionReason(ProfileData.builder()
+                .age(30).city("Минск").weight("85 кг.")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build()))
+                .isEqualTo("weight too high (85 kg, max 80)");
+        assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
+                .age(30).city("Минск").education("среднее")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();
+        assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
+                .age(30).city("Минск").education("высшее")
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isTrue();
         assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
                 .age(24).city("Минск")
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();
@@ -139,13 +233,13 @@ public class TaborRuWebCrawlerTest {
         protected Document retrieveDocument(String pageUrl, long throttlingDelayMs) {
             if (pageUrl.contains("/search")) {
                 int page = listPageOrdinal++;
-                return buildListPage(page, duplicateMatchingIdOnSecondPage);
+                return buildListPage(page, duplicateMatchingIdOnSecondPage, pageUrl);
             }
             detailFetchCount++;
             return Jsoup.parse(PROFILE_HTML.replace("1001", extractIdFromUrl(pageUrl)), pageUrl);
         }
 
-        private static Document buildListPage(int pageIndex, boolean duplicateOnSecondPage) {
+        private static Document buildListPage(int pageIndex, boolean duplicateOnSecondPage, String pageUrl) {
             int matchingId;
             int youngId;
             int otherCityId;
@@ -166,17 +260,12 @@ public class TaborRuWebCrawlerTest {
                 otherCityId = 2003;
                 noPhotoId = 2004;
             }
-            // On page 2 without duplicate mode, also include a fresh matching profile
             if (pageIndex == 1 && !duplicateOnSecondPage) {
                 matchingId = 2001;
             }
-            if (pageIndex == 1 && duplicateOnSecondPage) {
-                // second matching card is new
-                String html = listHtml(matchingId, youngId, otherCityId, noPhotoId, 2001, pageIndex == 0);
-                return Jsoup.parse(html, "https://tabor.ru/");
-            }
-            String html = listHtml(matchingId, youngId, otherCityId, noPhotoId, null, pageIndex == 0);
-            return Jsoup.parse(html, "https://tabor.ru/");
+            Integer extraMatchingId = (pageIndex == 1 && duplicateOnSecondPage) ? 2001 : null;
+            String html = listHtml(matchingId, youngId, otherCityId, noPhotoId, extraMatchingId, pageIndex == 0);
+            return Jsoup.parse(html, pageUrl);
         }
 
         private static String listHtml(int matchingId, int youngId, int otherCityId, int noPhotoId,
@@ -223,6 +312,7 @@ public class TaborRuWebCrawlerTest {
             <meta property="og:image" content="https://p7.tabor.ru/photos/2026/1001/photo_800x600.jpg"/>
             </head><body>
             <h1 class="user__name" itemprop="name">Анна</h1>
+            <div class="user__status__text">Привет всем</div>
             <span itemprop="description">30</span>
             <span itemprop="addressCountry">Беларусь</span>
             <span itemprop="addressLocality">Минск</span>
@@ -234,34 +324,46 @@ public class TaborRuWebCrawlerTest {
                   <span class="about__list__desc">любовь и отношения</span>
                 </li>
                 <li class="about__list__item">
+                  <span class="about__list__term">Важное в партнере:</span>
+                  <span class="about__list__desc">ум</span>
+                </li>
+                <li class="about__list__item">
                   <span class="about__list__term">Семейное положение:</span>
                   <span class="about__list__desc">не замужем</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Статус отношений:</span>
+                  <span class="about__list__desc">в активном поиске</span>
                 </li>
                 <li class="about__list__item">
                   <span class="about__list__term">Дети:</span>
                   <span class="about__list__desc">нет</span>
                 </li>
-                <li class="about__list__item">
-                  <span class="about__list__term">Отношение к курению:</span>
-                  <span class="about__list__desc">не курю</span>
-                </li>
               </ul>
             </div>
-            <div class="about__content">
+            <div class="about__content" id="type">
               <ul class="about__list">
                 <li class="about__list__item">
                   <span class="about__list__term">Телосложение:</span>
                   <span class="about__list__desc">обычное</span>
                 </li>
                 <li class="about__list__item">
-                  <span class="about__list__term">Рост:</span>
+                  <span class="about__list__term">Рост:&nbsp;</span>
                   <span class="about__list__desc">170 см.</span>
-                  <span class="about__list__term">Вес:</span>
+                  <span class="about__list__term">Вес:&nbsp;</span>
                   <span class="about__list__desc">60 кг.</span>
                 </li>
                 <li class="about__list__item">
                   <span class="about__list__term">Цвет глаз:</span>
                   <span class="about__list__desc">зеленый</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Моя внешность:</span>
+                  <span class="about__list__desc">обыкновенная</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">О себе:</span>
+                  <span class="about__list__desc">люблю путешествия</span>
                 </li>
               </ul>
             </div>
@@ -270,6 +372,46 @@ public class TaborRuWebCrawlerTest {
                 <li class="about__list__item">
                   <span class="about__list__term">Профессия:</span>
                   <span class="about__list__desc">дизайнер</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Сфера деятельности:</span>
+                  <span class="about__list__desc">IT</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Образование:</span>
+                  <span class="about__list__desc">высшее</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Жилье:</span>
+                  <span class="about__list__desc">своя квартира</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Материальное положение:</span>
+                  <span class="about__list__desc">среднее</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Материальная поддержка:</span>
+                  <span class="about__list__desc">не нуждаюсь в спонсоре</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Жизненные приоритеты:</span>
+                  <span class="about__list__desc">семья и карьера</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Черты характера:</span>
+                  <span class="about__list__desc">спокойная, целеустремленная</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Интересы и увлечения:</span>
+                  <span class="about__list__desc">путешествия, спорт</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Отношение к курению:</span>
+                  <span class="about__list__desc">не курю</span>
+                </li>
+                <li class="about__list__item">
+                  <span class="about__list__term">Отношение к алкоголю:</span>
+                  <span class="about__list__desc">не пью</span>
                 </li>
               </ul>
             </div>

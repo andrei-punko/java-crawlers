@@ -29,6 +29,8 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
     public static final int DEFAULT_MAX_AGE = 45;
     public static final String CITY = "Минск";
     public static final int COUNTRY_ID = 248;
+    /** Profiles with weight above this (kg) are excluded when weight is present. */
+    public static final int MAX_WEIGHT_KG = 80;
     /** «Дети» values that exclude a profile after the detail page is parsed. */
     public static final Set<String> EXCLUDED_CHILDREN = Set.of(
             "есть, живем вместе",
@@ -37,6 +39,10 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
     );
     /** «Отношение к курению» values that exclude a profile. */
     public static final Set<String> EXCLUDED_SMOKING = Set.of("курю");
+    /** «Семейное положение» values that exclude a profile. */
+    public static final Set<String> EXCLUDED_MARITAL_STATUS = Set.of("замужем");
+    /** «Образование» values that exclude a profile. */
+    public static final Set<String> EXCLUDED_EDUCATION = Set.of("среднее");
     /**
      * Safety ceiling when {@code maxPagesCap == -1} («all pages»), to avoid infinite loops
      * if pagination never ends.
@@ -100,7 +106,8 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
             Integer age = parseAge(element.select("[itemprop=description]").text());
             String city = StringUtils.trimToNull(element.select("[itemprop=addressLocality]").text());
             String profileId = extractProfileIdFromListCard(element);
-            if (age != null && age >= minAge && age <= maxAge
+            boolean ageOk = age == null || (age >= minAge && age <= maxAge);
+            if (ageOk
                     && CITY.equalsIgnoreCase(city)
                     && hasCoverPhoto(element)
                     && profileId != null
@@ -139,12 +146,38 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
 
     @Override
     protected String extractNextUrl(Document document) {
-        Elements nextLinks = document.select("a[rel=next]");
-        if (nextLinks.isEmpty()) {
+        Elements nextLinks = document.select("a[rel=next], .pager.next-user-action a");
+        if (!nextLinks.isEmpty()) {
+            String href = StringUtils.trimToNull(nextLinks.first().attr("abs:href"));
+            if (href != null) {
+                return href;
+            }
+        }
+        // After ~80 pages tabor.ru drops rel=next even though more pages still exist (~1000).
+        // Keep going by incrementing page= while the listing is non-empty.
+        if (document.select("li.search-list__item").isEmpty()) {
             return null;
         }
-        String href = nextLinks.first().attr("abs:href");
-        return StringUtils.trimToNull(href);
+        String next = incrementPageUrl(document.baseUri());
+        if (next != null) {
+            log.info("No rel=next on page; continue with {}", next);
+        }
+        return next;
+    }
+
+    static String incrementPageUrl(String pageUrl) {
+        if (StringUtils.isBlank(pageUrl)) {
+            return null;
+        }
+        Matcher matcher = Pattern.compile("([?&]page=)(\\d+)").matcher(pageUrl);
+        if (matcher.find()) {
+            int page = Integer.parseInt(matcher.group(2));
+            return matcher.replaceFirst(matcher.group(1) + (page + 1));
+        }
+        if (pageUrl.contains("?")) {
+            return pageUrl + "&page=2";
+        }
+        return pageUrl + "?page=2";
     }
 
     @SneakyThrows
@@ -182,19 +215,31 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
                 .name(StringUtils.trimToNull(document.select("h1.user__name").text()))
                 .age(age)
                 .city(StringUtils.trimToNull(document.select("[itemprop=addressLocality]").text()))
-                .country(StringUtils.trimToNull(document.select("[itemprop=addressCountry]").text()))
                 .photoUrl(extractPhotoUrl(document))
+                .statusText(StringUtils.trimToNull(document.select(".user__status__text").text()))
                 .lookingFor(lookingFor)
                 .purpose(about.get("Цель знакомства"))
+                .importantInPartner(about.get("Важное в партнере"))
+                .lifePriorities(about.get("Жизненные приоритеты"))
+                .characterTraits(about.get("Черты характера"))
+                .interestsAndHobbies(about.get("Интересы и увлечения"))
                 .height(about.get("Рост"))
                 .weight(about.get("Вес"))
                 .bodyType(about.get("Телосложение"))
                 .eyeColor(about.get("Цвет глаз"))
+                .appearance(about.get("Моя внешность"))
                 .maritalStatus(about.get("Семейное положение"))
+                .relationshipStatus(about.get("Статус отношений"))
                 .children(about.get("Дети"))
+                .education(about.get("Образование"))
                 .occupation(firstNonBlank(about.get("Профессия"), about.get("Сфера деятельности")))
+                .activity(about.get("Сфера деятельности"))
+                .housing(about.get("Жилье"))
+                .materialStatus(about.get("Материальное положение"))
+                .materialSupport(about.get("Материальная поддержка"))
                 .smoking(about.get("Отношение к курению"))
-                .aboutText(extractAboutText(document))
+                .alcohol(about.get("Отношение к алкоголю"))
+                .aboutText(about.get("О себе"))
                 .build();
     }
 
@@ -216,7 +261,7 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
             for (int i = 0; i < count; i++) {
                 String key = normalizeTerm(terms.get(i).text());
                 String value = StringUtils.trimToNull(descs.get(i).text());
-                if (key != null && value != null) {
+                if (key != null && value != null && !"Информация отсутствует".equalsIgnoreCase(key)) {
                     fields.put(key, value);
                 }
             }
@@ -229,16 +274,8 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
         if (trimmed == null) {
             return null;
         }
-        return trimmed.replace(":", "").trim();
-    }
-
-    private static String extractAboutText(Document document) {
-        Element aboutBlock = document.selectFirst("#about .about__list, .about__content#about");
-        if (aboutBlock == null) {
-            return null;
-        }
-        String text = StringUtils.trimToNull(aboutBlock.text());
-        return text;
+        // "Рост:&nbsp;" / "Рост:" → "Рост"
+        return trimmed.replace('\u00A0', ' ').replace(":", "").trim();
     }
 
     private static String extractId(String url) {
@@ -281,8 +318,8 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
         if (profile == null) {
             return "null profile";
         }
-        if (profile.getAge() == null || profile.getCity() == null || StringUtils.isBlank(profile.getPhotoUrl())) {
-            return "incomplete (age/city/photo)";
+        if (profile.getCity() == null || StringUtils.isBlank(profile.getPhotoUrl())) {
+            return "incomplete (city/photo)";
         }
         if (!profile.getPhotoUrl().contains("/photos/")) {
             return "no cover photo";
@@ -290,9 +327,29 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
         if (!CITY.equalsIgnoreCase(profile.getCity())) {
             return "city not " + CITY + " (" + profile.getCity() + ")";
         }
-        int age = profile.getAge();
-        if (age < minAge || age > maxAge) {
+        Integer age = profile.getAge();
+        if (age != null && (age < minAge || age > maxAge)) {
             return "age out of range (" + age + ", expected " + minAge + "-" + maxAge + ")";
+        }
+        Integer weightKg = parseAge(profile.getWeight());
+        if (weightKg != null && weightKg > MAX_WEIGHT_KG) {
+            return "weight too high (" + weightKg + " kg, max " + MAX_WEIGHT_KG + ")";
+        }
+        String maritalStatus = StringUtils.trimToNull(profile.getMaritalStatus());
+        if (maritalStatus != null) {
+            for (String excluded : EXCLUDED_MARITAL_STATUS) {
+                if (excluded.equalsIgnoreCase(maritalStatus)) {
+                    return "maritalStatus: " + maritalStatus;
+                }
+            }
+        }
+        String education = StringUtils.trimToNull(profile.getEducation());
+        if (education != null) {
+            for (String excluded : EXCLUDED_EDUCATION) {
+                if (excluded.equalsIgnoreCase(education)) {
+                    return "education: " + education;
+                }
+            }
         }
         String children = StringUtils.trimToNull(profile.getChildren());
         if (children != null) {
@@ -310,6 +367,39 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
                 }
             }
         }
+
+        String alcohol = StringUtils.trimToNull(profile.getAlcohol());
+        if (alcohol != null) {
+            String normalized = alcohol.trim();
+            while (!normalized.isEmpty()) {
+                char last = normalized.charAt(normalized.length() - 1);
+                if (last == '.' || last == ',' || last == ';' || last == ':') {
+                    normalized = normalized.substring(0, normalized.length() - 1).trim();
+                } else {
+                    break;
+                }
+            }
+            if (normalized.equalsIgnoreCase("люблю выпить")) {
+                return "alcohol: " + alcohol;
+            }
+        }
+
+        String materialSupport = StringUtils.trimToNull(profile.getMaterialSupport());
+        if (materialSupport != null) {
+            String normalized = materialSupport.trim();
+            while (!normalized.isEmpty()) {
+                char last = normalized.charAt(normalized.length() - 1);
+                if (last == '.' || last == ',' || last == ';' || last == ':') {
+                    normalized = normalized.substring(0, normalized.length() - 1).trim();
+                } else {
+                    break;
+                }
+            }
+            if (normalized.equalsIgnoreCase("ищу спонсора")) {
+                return "materialSupport: " + materialSupport;
+            }
+        }
+
         return null;
     }
 }
