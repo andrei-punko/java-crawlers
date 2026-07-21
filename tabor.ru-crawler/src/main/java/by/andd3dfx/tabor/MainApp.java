@@ -61,7 +61,9 @@ public class MainApp {
         log.info("Search criteria: women, city={}, age={}–{}", TaborRuWebCrawler.CITY, minAge, maxAge);
 
         var pageUrl = crawler.buildStartingUrl();
+        long parseStartedAt = System.nanoTime();
         var profiles = crawler.batchSearch(pageUrl, pagesCap, timeoutMs);
+        long parseElapsedMs = (System.nanoTime() - parseStartedAt) / 1_000_000L;
 
         Path photosDir = jsonPath.toAbsolutePath().getParent() != null
                 ? jsonPath.toAbsolutePath().getParent().resolve("photos")
@@ -106,6 +108,25 @@ public class MainApp {
                 .writeValueAsString(filtered);
         Files.writeString(jsonPath, jsonString, StandardCharsets.UTF_8);
         log.info("Saved {} profiles to {}", filtered.size(), jsonPath.toAbsolutePath());
+        log.info("Parsing took {}", formatDuration(parseElapsedMs));
+    }
+
+    static String formatDuration(long elapsedMs) {
+        long totalSeconds = elapsedMs / 1000L;
+        long hours = totalSeconds / 3600L;
+        long minutes = (totalSeconds % 3600L) / 60L;
+        long seconds = totalSeconds % 60L;
+        long millis = elapsedMs % 1000L;
+        if (hours > 0) {
+            return "%dh %dm %ds".formatted(hours, minutes, seconds);
+        }
+        if (minutes > 0) {
+            return "%dm %ds".formatted(minutes, seconds);
+        }
+        if (totalSeconds > 0) {
+            return "%d.%03ds".formatted(seconds, millis);
+        }
+        return elapsedMs + "ms";
     }
 
     private static void downloadCoverPhoto(ProfileData profile, Path photosDir) {
