@@ -188,7 +188,7 @@ public class TaborRuWebCrawlerTest {
         assertThat(crawler.rejectionReason(ProfileData.builder()
                 .age(30).city("Минск").weight("85 кг.")
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build()))
-                .isEqualTo("weight too high (85 kg, max 80)");
+                .isEqualTo("weight is too high (max 80 кг)");
         assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
                 .age(30).city("Минск").education("среднее")
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();

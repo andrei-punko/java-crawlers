@@ -47,7 +47,7 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
      * Safety ceiling when {@code maxPagesCap == -1} («all pages»), to avoid infinite loops
      * if pagination never ends.
      */
-    public static final int UNLIMITED_PAGES_HARD_CAP = 5000;
+    public static final int UNLIMITED_PAGES_HARD_CAP = 2000;
 
     private static final String BASE_URL = "https://tabor.ru";
     private static final Pattern PROFILE_ID_PATTERN = Pattern.compile("/id(\\d+)");
@@ -69,14 +69,6 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
         }
         this.minAge = minAge;
         this.maxAge = maxAge;
-    }
-
-    public int getMinAge() {
-        return minAge;
-    }
-
-    public int getMaxAge() {
-        return maxAge;
     }
 
     public String buildStartingUrl() {
@@ -333,7 +325,7 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
         }
         Integer weightKg = parseAge(profile.getWeight());
         if (weightKg != null && weightKg > MAX_WEIGHT_KG) {
-            return "weight too high (" + weightKg + " kg, max " + MAX_WEIGHT_KG + ")";
+            return "weight is too high (max " + MAX_WEIGHT_KG + " кг)";
         }
         String maritalStatus = StringUtils.trimToNull(profile.getMaritalStatus());
         if (maritalStatus != null) {
