@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Tabor — профили</title>
+  <link rel="stylesheet" href="/styles.css"/>
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Tabor profiles</h1>
+      <p id="status" class="muted">Загрузка…</p>
+    </div>
+    <div class="top-actions">
+      <button id="favorites-mode" type="button" class="mode-btn">Избранное</button>
+      <label class="filter">
+        <input id="show-divorced" type="checkbox"/>
+        Показать «разведена»
+      </label>
+      <label class="filter">
+        <input id="show-with-children" type="checkbox"/>
+        Показать с детьми
+      </label>
+    </div>
+  </header>
+  <main id="board" class="board"></main>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,4 +1,6 @@
 tabor-crawler.log
 tabor-crawler-*.log.gz
 profiles.json
+hidden.json
+favorites.json
 photos/
