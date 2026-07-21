@@ -218,23 +218,41 @@ function createCard(profile) {
 }
 
 function visibleProfiles() {
-  return allProfiles.filter((p) => {
-    if (!p || !p.id || hiddenIds.has(String(p.id))) {
-      return false;
-    }
-    const isFavorite = favoriteIds.has(String(p.id));
-    // Обычный борд — без избранного; режим «Избранное» — только избранные.
-    if (favoritesOnly ? !isFavorite : isFavorite) {
-      return false;
-    }
-    if (!showDivorcedEl.checked && isDivorced(p)) {
-      return false;
-    }
-    if (!showWithChildrenEl.checked && hasChildren(p)) {
-      return false;
-    }
-    return true;
-  });
+  return allProfiles
+    .filter((p) => {
+      if (!p || !p.id || hiddenIds.has(String(p.id))) {
+        return false;
+      }
+      const isFavorite = favoriteIds.has(String(p.id));
+      // Обычный борд — без избранного; режим «Избранное» — только избранные.
+      if (favoritesOnly ? !isFavorite : isFavorite) {
+        return false;
+      }
+      if (!showDivorcedEl.checked && isDivorced(p)) {
+        return false;
+      }
+      if (!showWithChildrenEl.checked && hasChildren(p)) {
+        return false;
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      const ageA = a.age;
+      const ageB = b.age;
+      if (ageA == null && ageB == null) {
+        return String(a.name || "").localeCompare(String(b.name || ""), "ru");
+      }
+      if (ageA == null) {
+        return 1;
+      }
+      if (ageB == null) {
+        return -1;
+      }
+      if (ageA !== ageB) {
+        return ageA - ageB;
+      }
+      return String(a.name || "").localeCompare(String(b.name || ""), "ru");
+    });
 }
 
 function updateStatus(visibleCount) {
