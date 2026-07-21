@@ -5,6 +5,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TaborRuWebCrawlerTest {
@@ -221,6 +223,17 @@ public class TaborRuWebCrawlerTest {
         assertThat(result).hasSize(2);
         assertThat(result).extracting(ProfileData::getId).containsExactly("1001", "2001");
         assertThat(stub.detailFetchCount).isEqualTo(2);
+    }
+
+    @Test
+    public void batchSearchSkipsSeededKnownProfileIds() {
+        var stub = new TaborRuWebCrawlerOfflineStub();
+        stub.seedKnownProfileIds(List.of("1001"));
+
+        var result = stub.batchSearch(stub.buildStartingUrl(), 2, 1);
+
+        assertThat(result).extracting(ProfileData::getId).containsExactly("2001");
+        assertThat(stub.detailFetchCount).isEqualTo(1);
     }
 
     private static final class TaborRuWebCrawlerOfflineStub extends TaborRuWebCrawler {

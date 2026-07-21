@@ -55,6 +55,8 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
     private final int minAge;
     private final int maxAge;
     private final Set<String> seenProfileIds = new HashSet<>();
+    /** Ids loaded from an existing profiles.json — skipped during resume crawl. */
+    private final Set<String> knownProfileIds = new HashSet<>();
 
     public TaborRuWebCrawler() {
         this(DEFAULT_MIN_AGE, DEFAULT_MAX_AGE);
@@ -71,6 +73,21 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
         this.maxAge = maxAge;
     }
 
+    /**
+     * Prefill ids that must not be fetched again (resume from existing {@code profiles.json}).
+     */
+    public void seedKnownProfileIds(Iterable<String> ids) {
+        knownProfileIds.clear();
+        if (ids == null) {
+            return;
+        }
+        for (String id : ids) {
+            if (id != null && !id.isBlank()) {
+                knownProfileIds.add(id.trim());
+            }
+        }
+    }
+
     public String buildStartingUrl() {
         String cityEncoded = URLEncoder.encode(CITY, StandardCharsets.UTF_8);
         return BASE_URL + "/search"
@@ -83,6 +100,10 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
     @Override
     public List<ProfileData> batchSearch(String pageUrl, int maxPagesCap, long throttlingDelayMs) {
         seenProfileIds.clear();
+        seenProfileIds.addAll(knownProfileIds);
+        if (!knownProfileIds.isEmpty()) {
+            log.info("Resume: {} profile ids already known, will skip them", knownProfileIds.size());
+        }
         int effectiveCap = maxPagesCap;
         if (effectiveCap == -1) {
             effectiveCap = UNLIMITED_PAGES_HARD_CAP;
