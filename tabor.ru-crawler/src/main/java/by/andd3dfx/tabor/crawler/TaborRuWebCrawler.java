@@ -33,8 +33,8 @@ public class TaborRuWebCrawler extends WebCrawler<ProfileData> {
     public static final int MAX_WEIGHT_KG = 80;
     /** «Дети» values that exclude a profile after the detail page is parsed. */
     public static final Set<String> EXCLUDED_CHILDREN = Set.of(
-            "есть, живем вместе",
-            "есть, живем порознь",
+//            "есть, живем вместе",
+//            "есть, живем порознь",
             "нет, и не хочу"
     );
     /** «Отношение к курению» values that exclude a profile. */
