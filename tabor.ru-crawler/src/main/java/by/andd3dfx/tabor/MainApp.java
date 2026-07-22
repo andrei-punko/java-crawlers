@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,11 +108,16 @@ public class MainApp {
                     .forEach(e -> log.info("  {}: {}", e.getKey(), e.getValue()));
         }
 
-        log.info("Downloading cover photos into {} (skip if file already exists)", photosDir);
+        Map<String, Path> photoIndex = indexPhotosById(photosDir);
+        if (newlyKept.isEmpty()) {
+            log.info("No new profiles to keep — skipping photo download for this crawl batch");
+        } else {
+            log.info("Downloading cover photos into {} (skip if file already exists)", photosDir);
+        }
         int downloaded = 0;
         int skippedExistingPhoto = 0;
         for (ProfileData profile : newlyKept) {
-            boolean wasPresent = ensureCoverPhoto(profile, photosDir);
+            boolean wasPresent = ensureCoverPhoto(profile, photosDir, photoIndex);
             if (wasPresent) {
                 skippedExistingPhoto++;
             } else if (profile.getPhotoPath() != null) {
@@ -119,12 +125,17 @@ public class MainApp {
             }
             byId.put(profile.getId(), profile);
         }
-        // Refresh photoPath for existing profiles if file is on disk but path missing/stale
+        // Sync photoPath from the on-disk index (no network, no per-profile directory scan).
         for (ProfileData profile : byId.values()) {
-            ensureCoverPhoto(profile, photosDir);
+            Path onDisk = photoIndex.get(profile.getId());
+            if (onDisk != null) {
+                profile.setPhotoPath(onDisk.toString());
+            }
         }
-        log.info("Photo download finished: downloaded={}, reused existing files≈{}",
-                downloaded, skippedExistingPhoto);
+        if (!newlyKept.isEmpty()) {
+            log.info("Photo download finished: downloaded={}, reused existing files≈{}",
+                    downloaded, skippedExistingPhoto);
+        }
 
         List<ProfileData> merged = new ArrayList<>(byId.values());
         merged.sort(Comparator
@@ -181,11 +192,18 @@ public class MainApp {
     /**
      * @return {@code true} if an existing photo file was reused (no network download)
      */
-    private static boolean ensureCoverPhoto(ProfileData profile, Path photosDir) {
+    private static boolean ensureCoverPhoto(ProfileData profile, Path photosDir, Map<String, Path> photoIndex) {
         if (profile.getId() == null) {
             return false;
         }
-        Path existing = findExistingPhoto(photosDir, profile.getId());
+        Path existing = photoIndex.get(profile.getId());
+        if (existing == null && profile.getPhotoPath() != null) {
+            Path fromJson = Path.of(profile.getPhotoPath());
+            if (Files.isRegularFile(fromJson)) {
+                existing = fromJson;
+                photoIndex.put(profile.getId(), existing);
+            }
+        }
         if (existing != null) {
             profile.setPhotoPath(existing.toString());
             return true;
@@ -198,23 +216,30 @@ public class MainApp {
         Path saved = photoDownloader.download(profile.getPhotoUrl(), target);
         if (saved != null) {
             profile.setPhotoPath(saved.toString());
+            photoIndex.put(profile.getId(), saved);
         }
         return false;
     }
 
-    static Path findExistingPhoto(Path photosDir, String profileId) {
-        if (profileId == null || !Files.isDirectory(photosDir)) {
-            return null;
+    static Map<String, Path> indexPhotosById(Path photosDir) {
+        Map<String, Path> index = new HashMap<>();
+        if (!Files.isDirectory(photosDir)) {
+            return index;
         }
-        String prefix = profileId + ".";
         try (Stream<Path> stream = Files.list(photosDir)) {
-            return stream
-                    .filter(Files::isRegularFile)
-                    .filter(p -> p.getFileName().toString().startsWith(prefix))
-                    .findFirst()
-                    .orElse(null);
+            stream.filter(Files::isRegularFile).forEach(path -> {
+                String name = path.getFileName().toString();
+                int dot = name.lastIndexOf('.');
+                if (dot <= 0) {
+                    return;
+                }
+                String id = name.substring(0, dot);
+                index.putIfAbsent(id, path);
+            });
         } catch (IOException e) {
-            return null;
+            log.warn("Could not index photos in {}: {}", photosDir, e.getMessage());
         }
+        log.info("Indexed {} photo files in {}", index.size(), photosDir.toAbsolutePath());
+        return index;
     }
 }
