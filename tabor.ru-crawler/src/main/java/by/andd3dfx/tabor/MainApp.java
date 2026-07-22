@@ -141,7 +141,7 @@ public class MainApp {
         log.info("Parsing took {}", formatDuration(parseElapsedMs));
     }
 
-    static List<ProfileData> loadExistingProfiles(Path jsonPath) {
+    static List<ProfileData> loadExistingProfiles(Path jsonPath) throws IOException {
         if (!Files.isRegularFile(jsonPath)) {
             return List.of();
         }
@@ -152,8 +152,11 @@ public class MainApp {
                     });
             return loaded != null ? loaded : List.of();
         } catch (IOException e) {
-            log.warn("Could not read existing {}: {} — starting fresh", jsonPath, e.getMessage());
-            return List.of();
+            throw new IOException(
+                    "Failed to read existing " + jsonPath.toAbsolutePath()
+                            + " — aborting to avoid overwriting. Fix the file or rename it aside. Cause: "
+                            + e.getMessage(),
+                    e);
         }
     }
 

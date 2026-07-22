@@ -1,13 +1,19 @@
 package by.andd3dfx.tabor.dto;
 
 import by.andd3dfx.crawler.dto.CrawlerData;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfileData implements CrawlerData {
 
     private String url;
