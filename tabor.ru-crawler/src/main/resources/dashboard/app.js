@@ -1,7 +1,5 @@
 const FIELD_LABELS = [
   ["id", "ID"],
-  ["name", "Имя"],
-  ["age", "Возраст"],
   ["city", "Город"],
   ["url", "URL"],
   ["photoUrl", "photoUrl"],
