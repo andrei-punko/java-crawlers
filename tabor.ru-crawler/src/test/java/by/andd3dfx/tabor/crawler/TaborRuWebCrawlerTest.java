@@ -132,10 +132,10 @@ public class TaborRuWebCrawlerTest {
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isTrue();
         assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
                 .age(30).city("Минск").children("есть, живем порознь")
-                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isTrue();
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();
         assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
                 .age(30).city("Минск").children("есть, живем вместе")
-                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isTrue();
+                .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();
         assertThat(crawler.matchesSearchCriteria(ProfileData.builder()
                 .age(30).city("Минск").children("нет, и не хочу")
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build())).isFalse();
@@ -168,9 +168,9 @@ public class TaborRuWebCrawlerTest {
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build()))
                 .isEqualTo("smoking: курю");
         assertThat(crawler.rejectionReason(ProfileData.builder()
-                .age(30).city("Минск").children("нет, и не хочу")
+                .age(30).city("Минск").children("есть, живем вместе")
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build()))
-                .isEqualTo("children: нет, и не хочу");
+                .isEqualTo("children: есть, живем вместе");
         assertThat(crawler.rejectionReason(ProfileData.builder()
                 .age(30).city("Минск").alcohol("люблю выпить")
                 .photoUrl("https://p7.tabor.ru/photos/x.jpg").build()))
