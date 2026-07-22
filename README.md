@@ -35,14 +35,14 @@ details
 
 To make search - use [run-search](rabota.by-crawler/run-search.bat) script in [rabota.by-crawler folder](rabota.by-crawler).
 
-## Crawler for [Onlíner](https://catalog.onliner.by/) CPU catalog (AM4)
+## Crawler for [Onlíner](https://catalog.onliner.by/) (CPU catalog, looking for AM4 CPUs)
 
 Check [OnlinerByCpuCrawler](onliner.by-crawler/src/main/java/by/andd3dfx/onliner/crawler/OnlinerByCpuCrawler.java) for details.
 It reads the JSON-LD `ItemList` from catalog pages (filters: `socket_cpu[0]=am4`, `price[from]=1`).
 
 To run — use [run-search](onliner.by-crawler/run-search.bat) in the [onliner.by-crawler](onliner.by-crawler) folder after `mvn package` (output JSON path and optional args are set in the script).
 
-## Crawler for dating site [tabor.ru](https://tabor.ru) (women in Minsk, age 25–45)
+## Crawler for dating site [tabor.ru](https://tabor.ru)
 
 Check [TaborRuWebCrawler](tabor.ru-crawler/src/main/java/by/andd3dfx/tabor/crawler/TaborRuWebCrawler.java) for details.
 It searches women profiles in Minsk (age 25–45) that have a cover photo, opens each profile, and downloads only that photo.
