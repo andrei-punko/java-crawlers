@@ -30,14 +30,12 @@ const FIELD_LABELS = [
 ];
 
 const SHOW_DIVORCED_KEY = "tabor.showDivorced";
-const SHOW_WITH_CHILDREN_KEY = "tabor.showWithChildren";
 const FAVORITES_MODE_KEY = "tabor.favoritesMode";
 const LEGACY_HIDE_DIVORCED_KEY = "tabor.hideDivorced";
 
 const statusEl = document.getElementById("status");
 const boardEl = document.getElementById("board");
 const showDivorcedEl = document.getElementById("show-divorced");
-const showWithChildrenEl = document.getElementById("show-with-children");
 const favoritesModeEl = document.getElementById("favorites-mode");
 
 let allProfiles = [];
@@ -66,12 +64,6 @@ showDivorcedEl.addEventListener("change", () => {
   render();
 });
 
-showWithChildrenEl.checked = localStorage.getItem(SHOW_WITH_CHILDREN_KEY) === "1";
-showWithChildrenEl.addEventListener("change", () => {
-  localStorage.setItem(SHOW_WITH_CHILDREN_KEY, showWithChildrenEl.checked ? "1" : "0");
-  render();
-});
-
 favoritesModeEl.classList.toggle("active", favoritesOnly);
 favoritesModeEl.addEventListener("click", () => {
   favoritesOnly = !favoritesOnly;
@@ -97,14 +89,6 @@ document.addEventListener("keydown", (e) => {
 
 function isDivorced(profile) {
   return String(profile.maritalStatus || "").trim().toLowerCase() === "разведена";
-}
-
-function hasChildren(profile) {
-  const value = String(profile.children || "").trim().toLowerCase();
-  if (!value || value.startsWith("нет")) {
-    return false;
-  }
-  return true;
 }
 
 function photoSrc(profile) {
@@ -229,9 +213,6 @@ function visibleProfiles() {
       if (!showDivorcedEl.checked && isDivorced(p)) {
         return false;
       }
-      if (!showWithChildrenEl.checked && hasChildren(p)) {
-        return false;
-      }
       return true;
     })
     .sort((a, b) => {
@@ -257,9 +238,6 @@ function updateStatus(visibleCount) {
   const divorcedHidden = !showDivorcedEl.checked
     ? allProfiles.filter((p) => p && p.id && !hiddenIds.has(String(p.id)) && isDivorced(p)).length
     : 0;
-  const withChildrenHidden = !showWithChildrenEl.checked
-    ? allProfiles.filter((p) => p && p.id && !hiddenIds.has(String(p.id)) && hasChildren(p)).length
-    : 0;
 
   statusEl.classList.remove("error");
   let text = favoritesOnly ? `Избранное: ${visibleCount}` : `Показано: ${visibleCount}`;
@@ -271,9 +249,6 @@ function updateStatus(visibleCount) {
   }
   if (divorcedHidden) {
     text += ` · скрыто «разведена»: ${divorcedHidden}`;
-  }
-  if (withChildrenHidden) {
-    text += ` · скрыто с детьми: ${withChildrenHidden}`;
   }
   text += ` · всего в JSON: ${totalInJson}`;
   statusEl.textContent = text;
